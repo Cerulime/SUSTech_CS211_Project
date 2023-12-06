@@ -1,7 +1,7 @@
 module Song(
     input [2:0] song,
-    input [31:0] cnt,
-    output [31:0] track,
+    input [20:0] cnt,
+    output [20:0] track,
     output reg [2:0] octave,
     output reg [2:0] note,
     output reg [3:0] length,

@@ -1,64 +1,33 @@
 module Automode (
     input clk, en,
     input [2:0] song,
-    output reg [6:0] led,
+    output [6:0] led,
     output buzzer
 );
 wire [2:0] octave;
 wire [2:0] note;
 wire [3:0] length;
 wire [2:0] full_note;
-    Sound sd(clk, en, octave, note, length, full_note, buzzer);
-    always @(song) begin
-        case(song)
-            0: begin
-                octave <= 3'b100;
-                note <= 3'b000;
-                length <= 4'b0000;
-                full_note <= 3'b100;
+wire over;
+    Sound sd(clk, en, octave, note, length, full_note, buzzer, over);
+reg [2:0] song_input;
+reg [31:0] cnt;
+wire [31:0] track;
+    Song sg(song_input, cnt, track, octave, note, length, full_note);
+    Light lt(clk, en, note, led);
+    always @(posedge clk) begin
+        if (en) begin
+            if (over) begin
+                if (cnt < track) begin
+                    cnt <= cnt + 1;
+                end else begin
+                    cnt <= 0;
+                    song_input <= song_input + 1;
+                end
             end
-            1: begin
-                octave <= 3'b100;
-                note <= 3'b001;
-                length <= 4'b0000;
-                full_note <= 3'b100;
-            end
-            2: begin
-                octave <= 3'b100;
-                note <= 3'b010;
-                length <= 4'b0000;
-                full_note <= 3'b100;
-            end
-            3: begin
-                octave <= 3'b100;
-                note <= 3'b011;
-                length <= 4'b0000;
-                full_note <= 3'b100;
-            end
-            4: begin
-                octave <= 3'b100;
-                note <= 3'b100;
-                length <= 4'b0000;
-                full_note <= 3'b100;
-            end
-            5: begin
-                octave <= 3'b100;
-                note <= 3'b101;
-                length <= 4'b0000;
-                full_note <= 3'b100;
-            end
-            6: begin
-                octave <= 3'b100;
-                note <= 3'b110;
-                length <= 4'b0000;
-                full_note <= 3'b100;
-            end
-            7: begin
-                octave <= 3'b100;
-                note <= 3'b111;
-                length <= 4'b0000;
-                full_note <= 3'b100;
-            end
-        endcase
+        end else begin
+            cnt <= 0;
+            song_input <= song;
+        end
     end
 endmodule

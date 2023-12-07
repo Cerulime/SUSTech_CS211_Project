@@ -17,6 +17,7 @@ module Scoring(
     output reg [20:0] base_score,
     output reg [20:0] bonus_score,
     output reg [20:0] combo,
+    output reg [20:0] acc,
     output reg [2:0] level
 );
 reg [20:0] hit_score;
@@ -26,7 +27,6 @@ reg [20:0] one_hit_score;
 localparam P = 16, S = 64, A = 97, B = 127, C = 188;
 wire [20:0] sqrt_combo;
     Sqrt sqrt(combo, sqrt_combo);
-reg [20:0] acc;
     always @(*) begin
         if (clock < goal_clock) begin
             timer = goal_clock - clock;
@@ -64,10 +64,10 @@ reg [20:0] acc;
                 combo = 0;
             end
         end
-        one_hit_score = 500000 * mod_mutiplier / 100 / total_note;
+        one_hit_score = 5000 * mod_mutiplier / total_note;
         base_score = one_hit_score * hit_score / 320;
         bonus_score = one_hit_score * hit_bonus * sqrt_combo / 32;
-        acc = {10'b0, last_base_score} * 1000 / (now_cnt * 300);
+        acc = {5'b0, last_base_score} * 10 / (now_cnt * 3);
         if (acc >= 10000 && mod_divider > 100) begin
             level = 0;
         end else if (acc >= 10000) begin

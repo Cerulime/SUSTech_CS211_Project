@@ -8,7 +8,11 @@ module Playmode(
     input [3:0] difficutly,
     output reg [6:0] note_led,
     output reg [6:0] level_led,
-    output buzzer
+    output buzzer,
+    output ctr1,
+    output [7:0] tube1,
+    output ctr2,
+    output [7:0] tube2
 );
 reg [20:0] microsecond;
 reg [31:0] system_clock;
@@ -31,7 +35,8 @@ wire [2:0] octave;
 wire [2:0] note;
 wire [3:0] length;
 reg en_hit;
-    Hit ht(clk, en_hit, oct_up, oct_down, note_key, length_key, system_clock, clock, octave, note, length);
+    Hit ht(clk, en_hit, oct_up, oct_down, note_key, length_key, system_clock, 
+           clock, octave, note, length);
 wire [2:0] full_note;
 wire over;
     Sound sd(clk, en, octave, note, length, full_note, buzzer, over);
@@ -70,12 +75,18 @@ assign mod_mutiplier[2] = 50; // HalfTime
 assign mod_divider[2] = 100;
 assign mod_mutiplier[3] = 100; // DoubleTime
 assign mod_divider[3] = 110;
-    Scoreboard sb();
 reg [20:0] base_score, bonus_score, last_combo;
 wire [20:0] base_temp, bonus_temp, combo;
+wire [20:0] acc;
 wire [2:0] level;
-    Scoring sc(clock, octave, note, length, goal_clock, goal_octave, goal_note, goal_length, last_combo, cnt, track, mod_mutiplier[mod], mod_divider[mod], difficutly, base_score, base_temp, bonus_temp, combo, level);
+    Scoring sc(clock, octave, note, length, 
+               goal_clock, goal_octave, goal_note, goal_length, 
+               last_combo, cnt, track, mod_mutiplier[mod], mod_divider[mod], difficutly, base_score, 
+               base_temp, bonus_temp, combo, acc, level);
     Light llt(clk, en, level, level_led);
+    Scoreboard sb(clk, en, 
+                  combo, mod, difficutly, base_score, bonus_score, acc, level, 
+                  ctr1, tube1, ctr2, tube2);
     always @(posedge clk) begin
         if (en) begin
             if (over) begin

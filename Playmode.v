@@ -1,53 +1,45 @@
+`include "Constants.vh"
 module Playmode(
-    input clk, en,
-    input oct_up, oct_down,
-    input [6:0] note_key,
-    input [6:0] length_key,
-    input [2:0] song,
+    input clk, en, rst_n,
+    input en_hit, oct_up, oct_down,
+    input [`NOTE_KEY_BITS-1:0] note_key,
+    input [`LENGTH_KEY_BITS-1:0] length_key,
+    input [`CLOCK_BITS-1:0] system_clock,
+    input [`SONG_BITS-1:0] song,
     input [1:0] mod,
     input [3:0] difficutly,
-    output reg [6:0] note_led,
+    output reg [`NOTE_KEY_BITS-1:0] note_led,
     output reg [6:0] level_led,
     output buzzer,
     output ctr1,
-    output [7:0] tube1,
+    output [`TUBE_BITS-1:0] tube1,
     output ctr2,
-    output [7:0] tube2
+    output [`TUBE_BITS:0] tube2
 );
-reg [20:0] microsecond;
-reg [31:0] system_clock;
-reg [31:0] goal_clock;
-    always @(posedge clk) begin
-        if (en) begin
-            if (microsecond < 100000) begin
-                microsecond <= microsecond + 1;
-            end else begin
-                microsecond <= 0;
-                system_clock <= system_clock + 1;
-            end
-        end else begin
-            microsecond <= 0;
-            system_clock <= 0;
-        end
-    end
-wire [31:0] clock;
-wire [2:0] octave;
-wire [2:0] note;
-wire [3:0] length;
-reg en_hit;
-    Hit ht(clk, en_hit, oct_up, oct_down, note_key, length_key, system_clock, 
+reg can_hit;
+wire [`CLOCK_BITS-1:0] clock;
+wire [`OCTAVE_BITS-1:0] octave;
+wire [`NOTE_BITS-1:0] note;
+wire [`LENGTH_BITS-1:0] length;
+reg en_sd;
+    Pulse pht(clk, rst_n, en_hit & can_hit, en_sd);
+    Hit ht(clk, en, oct_up, oct_down, note_key, length_key, system_clock, 
            clock, octave, note, length);
-wire [2:0] full_note;
+wire [`FULL_NOTE_BITS-1:0] full_note;
 wire over;
-    Sound sd(clk, en, octave, note, length, full_note, buzzer, over);
-reg [2:0] song_input;
-reg [20:0] cnt;
-wire [20:0] track;
-wire [2:0] goal_octave;
-wire [2:0] goal_note;
-wire [3:0] goal_length;
+    Sound sd(clk, en_sd, octave, note, length, full_note, buzzer, over);
+    always @(over) begin
+        en_sd <= en_sd | ~over;
+    end
+reg [`SONG_BITS-1:0] song_input;
+reg [`SONG_CNT_BITS-1:0] cnt;
+wire [`SONG_CNT_BITS-1:0] track;
+wire [`OCTAVE_BITS-1:0] goal_octave;
+wire [`NOTE_BITS-1:0] goal_note;
+wire [`LENGTH_BITS-1:0] goal_length;
     Song sg(song_input, cnt, track, goal_octave, goal_note, goal_length, full_note);
     Light nlt(clk, en, goal_note, note_led);
+reg [`CLOCK_BITS-1:0] goal_clock;
     always @(posedge clk) begin
         if (en) begin
             if (over) begin
@@ -58,30 +50,25 @@ wire [3:0] goal_length;
                     cnt <= 0;
                     song_input <= 0;
                 end
+            end else begin
+                cnt <= cnt;
+                song_input <= song;
+                goal_clock <= goal_clock;
             end
         end else begin
             cnt <= 0;
             song_input <= song;
-            en_hit <= 0;
+            goal_clock <= 0;
         end
     end
-wire [6:0] mod_mutiplier [3:0];
-wire [6:0] mod_divider [3:0];
-assign mod_mutiplier[0] = 100; // Normal
-assign mod_divider[0] = 100;
-assign mod_mutiplier[1] = 50; // NoFail
-assign mod_divider[1] = 100;
-assign mod_mutiplier[2] = 50; // HalfTime
-assign mod_divider[2] = 100;
-assign mod_mutiplier[3] = 100; // DoubleTime
-assign mod_divider[3] = 110;
+//not checked
 reg [20:0] base_score, bonus_score, last_combo;
 wire [20:0] base_temp, bonus_temp, combo;
 wire [20:0] acc;
 wire [2:0] level;
     Scoring sc(clock, octave, note, length, 
                goal_clock, goal_octave, goal_note, goal_length, 
-               last_combo, cnt, track, mod_mutiplier[mod], mod_divider[mod], difficutly, base_score, 
+               last_combo, cnt, track, mod, difficutly, base_score, 
                base_temp, bonus_temp, combo, acc, level);
     Light llt(clk, en, level, level_led);
     Scoreboard sb(clk, en, 
@@ -93,13 +80,15 @@ wire [2:0] level;
                 base_score <= base_score + base_temp;
                 bonus_score <= bonus_score + bonus_temp;
                 last_combo <= combo;
-                en_hit <= 1;
+                can_hit <= 0;
             end else begin
-                en_hit <= 0;
+                can_hit <= 1;
             end
         end else begin
             base_score <= 0;
             bonus_score <= 0;
+            last_combo <= 0;
+            can_hit <= 0;
         end
     end
 endmodule

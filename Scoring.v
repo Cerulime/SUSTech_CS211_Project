@@ -1,17 +1,17 @@
+`include "Constants.vh"
 module Scoring(
-    input [31:0] clock,
-    input [2:0] octave,
-    input [2:0] note,
-    input [3:0] length,
-    input [31:0] goal_clock,
-    input [2:0] goal_octave,
-    input [2:0] goal_note,
-    input [3:0] goal_length,
+    input [`CLOCK_BITS-1:0] clock,
+    input [`OCTAVE_BITS-1:0] octave,
+    input [`NOTE_BITS-1:0] note,
+    input [`LENGTH_BITS-1:0] length,
+    input [`CLOCK_BITS-1:0] goal_clock,
+    input [`OCTAVE_BITS-1:0] goal_octave,
+    input [`NOTE_BITS-1:0] goal_note,
+    input [`LENGTH_BITS-1:0] goal_length,
     input [20:0] last_combo,
     input [20:0] now_cnt,
     input [20:0] total_note,
-    input [6:0] mod_mutiplier,
-    input [6:0] mod_divider,
+    input [1:0] mod,
     input [3:0] difficutly,
     input [20:0] last_base_score,
     output reg [20:0] base_score,
@@ -20,6 +20,27 @@ module Scoring(
     output reg [20:0] acc,
     output reg [2:0] level
 );
+wire [6:0] mod_mutiplier, mod_divider;
+    always @(mod) begin
+        case (mod)
+            2'b00: begin // Normal
+                mod_mutiplier = 100;
+                mod_divider = 100;
+            end
+            2'b01: begin // No Fail
+                mod_mutiplier = 50;
+                mod_divider = 100;
+            end
+            2'b10: begin // Half Time
+                mod_mutiplier = 50;
+                mod_divider = 100;
+            end
+            2'b11: begin // Double Time
+                mod_mutiplier = 100;
+                mod_divider = 110;
+            end
+        endcase
+    end
 reg [20:0] hit_score;
 reg [20:0] hit_bonus;
 reg [20:0] timer;

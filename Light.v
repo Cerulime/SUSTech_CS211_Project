@@ -1,7 +1,8 @@
+`include "Constants.vh"
 module Light(
     input clk, en,
-    input [2:0] note
-    output reg [6:0] led
+    input [`NOTE_BITS-1:0] note
+    output reg [`NOTE_KEY_BITS-1:0] led
 );
     always @(posedge clk) begin
         if(en) begin

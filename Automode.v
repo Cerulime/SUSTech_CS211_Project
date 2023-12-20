@@ -1,18 +1,19 @@
+`include "Constants.vh"
 module Automode (
     input clk, en,
-    input [2:0] song,
-    output [6:0] led,
+    input [`SONG_BITS-1:0] song,
+    output [`NOTE_KEY_BITS-1:0] led,
     output buzzer
 );
-wire [2:0] octave;
-wire [2:0] note;
-wire [3:0] length;
-wire [2:0] full_note;
+wire [`OCTAVE_BITS-1:0] octave;
+wire [`NOTE_BITS-1:0] note;
+wire [`LENGTH_BITS-1:0] length;
+wire [`FULL_NOTE_BITS-1:0] full_note;
 wire over;
     Sound sd(clk, en, octave, note, length, full_note, buzzer, over);
-reg [2:0] song_input;
-reg [31:0] cnt;
-wire [31:0] track;
+reg [`SONG_BITS-1:0] song_input;
+reg [`SONG_CNT_BITS-1:0] cnt;
+wire [`SONG_CNT_BITS-1:0] track;
     Song sg(song_input, cnt, track, octave, note, length, full_note);
     Light lt(clk, en, note, led);
     always @(posedge clk) begin

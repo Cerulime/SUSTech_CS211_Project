@@ -1,11 +1,12 @@
+`include "Constants.vh"
 module Song(
-    input [2:0] song,
-    input [20:0] cnt,
-    output [20:0] track,
-    output reg [2:0] octave,
-    output reg [2:0] note,
-    output reg [3:0] length,
-    output reg [2:0] full_note
+    input [`SONG_BITS-1:0] song,
+    input [`SONG_CNT_BITS-1:0] cnt,
+    output [`SONG_CNT_BITS-1:0] track,
+    output reg [`OCTAVE_BITS-1:0] octave,
+    output reg [`NOTE_BITS-1:0] note,
+    output reg [`LENGTH_BITS-1:0] length,
+    output reg [`FULL_NOTE_BITS-1:0] full_note
 );
     always @(song) begin
         case(song)

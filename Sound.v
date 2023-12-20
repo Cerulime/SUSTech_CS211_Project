@@ -1,9 +1,10 @@
+`include "Constants.vh"
 module Sound(
     input clk, en,
-    input [2:0] octave,
-    input [2:0] note,
-    input [3:0] length,
-    input [2:0] full_note,
+    input [`OCTAVE_BITS-1:0] octave,
+    input [`NOTE_BITS-1:0] note,
+    input [`LENGTH_BITS-1:0] length,
+    input [`FULL_NOTE_BITS-1:0] full_note,
     output buzzer,
     output reg over
 );
@@ -38,9 +39,9 @@ wire [20:0] pwm;
         endcase
     end
 
-reg [20:0] pwm_counter = 0;
-reg [31:0] length_counter = 0;
-reg buzz_state = 0;
+reg [20:0] pwm_counter;
+reg [31:0] length_counter;
+reg buzz_state;
 
     always @(posedge clk) begin
         if(en) begin
@@ -52,16 +53,19 @@ reg buzz_state = 0;
             end
 
             if(length_counter >= (full_note * 100000000 / pow[length])) begin
+                pwm_counter <= 0;
                 length_counter <= 0;
                 buzz_state <= 0;
                 over <= 1;
             end else begin
                 length_counter <= length_counter + 1;
+                over <= 0;
             end
         end else begin
             pwm_counter <= 0;
             length_counter <= 0;
             buzz_state <= 0;
+            over <= 1;
         end
     end
 

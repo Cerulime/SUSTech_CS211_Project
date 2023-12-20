@@ -1,39 +1,43 @@
+`include "Constants.vh"
 module Hit(
-    input clk, en,
+    input clk, en, rst_n,
     input oct_up, oct_down,
-    input [6:0] note_key,
-    input [6:0] length_key,
-    input [31:0] system_clock,
-    output [31:0] clock,
-    output [2:0] octave,
-    output [2:0] note,
-    output [3:0] length
+    input [`NOTE_KEY_BITS-1:0] note_key,
+    input [`LENGTH_KEY_BITS-1:0] length_key,
+    input [`CLOCK_BITS-1:0] system_clock,
+    output [`CLOCK_BITS-1:0] clock,
+    output [`OCTAVE_BITS-1:0] octave,
+    output [`NOTE_BITS-1:0] note,
+    output [`LENGTH_BITS-1:0] length
 );
-reg [2:0] now_octave;
-reg [2:0] now_note;
-reg [3:0] now_length;
-reg [31:0] now_clock;
+reg pulse_up, pulse_down;
+    Pulse p_up(clk, rst_n, oct_up, pulse_up);
+    Pulse p_down(clk, rst_n, oct_down, pulse_down);
+reg [`OCTAVE_BITS-1:0] now_octave;
+reg [`NOTE_BITS-1:0] now_note;
+reg [`LENGTH_BITS-1:0] now_length;
+reg [`CLOCK_BITS-1:0] now_clock;
 integer i;
+    always @(oct_up, oct_down, note_key, length_key) begin
+        case ({oct_up, oct_down})
+            2'b01: now_octave = now_octave - 1;
+            2'b10: now_octave = now_octave + 1;
+            default: now_octave = now_octave;
+        endcase
+        for (i = 0; i < `NOTE_KEY_BITS-1; i = i + 1) begin
+            if (note_key & (7'b1 << i)) begin
+                now_note = i;
+            end
+            if (length_key & (7'b1 << i)) begin
+                now_length = i;
+            end
+        end
+    end
     always @(posedge clk) begin
         if (en) begin
-            case ({oct_up, oct_down})
-                2'b01: now_octave <= now_octave - 1;
-                2'b10: now_octave <= now_octave + 1;
-                default: now_octave <= now_octave;
-            endcase
-            for (i = 0; i < 7; i = i + 1) begin
-                if (note_key[i]) begin
-                    now_note <= i;
-                end
-                if (length_key[i]) begin
-                    now_length <= i;
-                end
-            end
-            now_clock <= system_clock;
+            if (now_clock == 0)
+                now_clock <= system_clock;
         end else begin
-            now_octave <= 4;
-            now_note <= 0;
-            now_length <= 0;
             now_clock <= 0;
         end
     end

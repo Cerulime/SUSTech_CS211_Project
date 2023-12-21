@@ -48,7 +48,6 @@ module Menu(
             3'b101:seg_en = 8'h20;
             3'b110:seg_en = 8'h40;
             3'b111:seg_en = 8'h80;
-            default: seg_en = 8'h00;
         endcase
     end
     
@@ -112,6 +111,7 @@ module Menu(
                             8'h80:tube2 = `two;
                             default:tube2 = `emp;
                         endcase
+                    default:tube2 = `emp;
                 endcase
             `stdy_mode:
                 case(song)
@@ -125,6 +125,7 @@ module Menu(
                             8'h80:tube2 = `two;
                             default:tube2 = `emp;
                         endcase
+                    default:tube2 = `emp;
                 endcase
             `play_mode:
                 case(song)
@@ -138,6 +139,7 @@ module Menu(
                             8'h80:tube2 = `two;
                             default:tube2 = `emp;
                         endcase
+                    default:tube2 = `emp;
                 endcase
             `set:tube2 = `emp;
             default:tube2 = `emp;

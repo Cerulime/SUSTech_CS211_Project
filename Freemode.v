@@ -21,7 +21,7 @@ wire over;
     always @(over) begin
         en_sd <= en_sd | ~over;
     end
-    Light lt(clk, en_sd, note, led);
+    Light lt(en_sd, note, led);
     always @(posedge clk) begin
         if (en) begin
             if (over) begin

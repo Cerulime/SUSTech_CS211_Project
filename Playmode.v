@@ -38,7 +38,7 @@ wire [`OCTAVE_BITS-1:0] goal_octave;
 wire [`NOTE_BITS-1:0] goal_note;
 wire [`LENGTH_BITS-1:0] goal_length;
     Song sg(song_input, cnt, track, goal_octave, goal_note, goal_length, full_note);
-    Light nlt(clk, en, goal_note, note_led);
+    Light nlt(en, goal_note, note_led);
 reg [`CLOCK_BITS-1:0] goal_clock;
     always @(posedge clk) begin
         if (en) begin

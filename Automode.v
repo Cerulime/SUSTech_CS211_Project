@@ -15,7 +15,7 @@ reg [`SONG_BITS-1:0] song_input;
 reg [`SONG_CNT_BITS-1:0] cnt;
 wire [`SONG_CNT_BITS-1:0] track;
     Song sg(song_input, cnt, track, octave, note, length, full_note);
-    Light lt(clk, en, note, led);
+    Light lt(en, note, led);
     always @(posedge clk) begin
         if (en) begin
             if (over) begin

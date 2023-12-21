@@ -71,7 +71,7 @@ wire [2:0] level;
                goal_clock, goal_octave, goal_note, goal_length, 
                last_combo, cnt, track, mod, difficutly, base_score, 
                base_temp, bonus_temp, combo, acc, level);
-    Light llt(clk, en, level, level_led);
+    Light llt( en, level, level_led);
     Scoreboard sb(clk, en, 
                   combo, mod, difficutly, base_score, bonus_score, acc, level, 
                   ctr1, tube1, ctr2, tube2);

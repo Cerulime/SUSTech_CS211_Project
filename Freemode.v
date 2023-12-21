@@ -5,22 +5,26 @@ module Freemode (
     input [`NOTE_KEY_BITS-1:0] note_key,
     input [`LENGTH_KEY_BITS-1:0] length_key,
     input [`CLOCK_BITS-1:0] system_clock,
-    output reg [`NOTE_KEY_BITS-1:0] led,
+    output [`NOTE_KEY_BITS-1:0] led,
     output buzzer
 );
+wire [`FULL_NOTE_BITS-1:0] full_note;
 wire [`CLOCK_BITS-1:0] clock;
 wire [`OCTAVE_BITS-1:0] octave;
 wire [`NOTE_BITS-1:0] note;
 wire [`LENGTH_BITS-1:0] length;
+assign full_note = 3'b100;
     Hit ht(clk, en, rst_n, oct_up, oct_down, note_key, length_key, system_clock, 
            clock, octave, note, length);
 wire en_sd_out;
 reg en_sd;
     Pulse psd(clk, rst_n, en_hit, en_sd_out);
 wire over;
-    Sound sd(clk, en_sd, octave, note, length, 3'b100, buzzer, over);
+    Sound sd(clk, en_sd, octave, note, length, full_note, buzzer, over);
     always @(*) begin
         en_sd <= en_sd_out | ~over;
     end
     Light lt(en_sd, note, led);
+
+    // TODO: VGA
 endmodule

@@ -1,8 +1,8 @@
 `include "Constants.vh"
-module Seventube(
+module Menu(
     input clk, rst_n,
-    input [2:0]state,
-    input [2:0]song,
+    input [2:0] state,
+    input [2:0] song,
     output reg [7:0] seg_en,
     output reg [7:0] tube1,
     output reg [7:0] tube2
@@ -12,19 +12,17 @@ module Seventube(
     reg [31:0] cnt;
     reg [2:0] scan_cnt;
     
-    parameter period = 200000;//500HZ
+    parameter period = 200000; // 500HZ
     
     always @(posedge clk, negedge rst_n) begin
         if(~rst_n) begin
             cnt <= 0;
             clkout <= 0;
-        end
-        else begin
+        end else begin
             if(cnt == (period>>1)-1) begin
                 clkout <= ~clkout;
                 cnt <= 0;
-            end
-            else
+            end else
                 cnt <= cnt + 1;
         end
     end
@@ -95,13 +93,13 @@ module Seventube(
                     8'h04:tube1 = `t;
                     default: tube1 = `emp;
                 endcase
-            default: tube1 = 8'b00000000;
+            default: tube1 = `emp;
         endcase
     end
     
     always @(*) begin
         case(state)
-            `free_mode:tube2 = 8'b00000000;
+            `free_mode:tube2 = `emp;
             `auto_mode:
                 case(song)
                     `little_star:

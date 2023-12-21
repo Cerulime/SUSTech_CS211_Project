@@ -20,13 +20,14 @@ wire [`NOTE_BITS-1:0] note;
 wire [`LENGTH_BITS-1:0] length;
     Hit ht(clk, en, rst_n, oct_up, oct_down, note_key, length_key, system_clock, 
            clock, octave, note, length);
+wire en_sd_out;
 reg en_sd;
-    Pulse psd(clk, rst_n, en_hit, en_sd);
+    Pulse psd(clk, rst_n, en_hit, en_sd_out);
 wire [`FULL_NOTE_BITS-1:0] full_note;
 wire over;
     Sound sd(clk, en_sd, octave, note, length, full_note, buzzer, over);
-    always @(over) begin
-        en_sd <= en_sd | ~over;
+    always @(*) begin
+        en_sd <= en_sd_out | ~over;
     end
 reg [`SONG_BITS-1:0] song_input;
 reg [`SONG_CNT_BITS-1:0] cnt;
@@ -43,7 +44,7 @@ wire [`LENGTH_BITS-1:0] rec_length;
 wire [`FULL_NOTE_BITS-1:0] rec_full_note;
     Record rc(is_rw, en_rec, rec_cnt, octave, note, length, full_note, 
               rec_octave, rec_note, rec_length, rec_full_note);
-    Light nlt(en, goal_note, note_led);
+    Light nlt(en_sd, goal_note, note_led);
     always @(posedge clk) begin
         if (en) begin
             if (!is_record) begin
@@ -84,7 +85,6 @@ wire [`FULL_NOTE_BITS-1:0] rec_full_note;
         end else begin
             cnt <= 0;
             song_input <= song;
-            en_hit <= 0;
             en_rec <= 0;
             rec_cnt <= 0;
         end

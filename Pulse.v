@@ -24,6 +24,7 @@ reg last_pul;
         if (!rst_n) begin
             last_sclk <= 0;
             last_pul <= 0;
+            pulse <= 0;
         end else begin
             last_sclk <= slow_clk;
             if (slow_clk & ~last_sclk)

@@ -1,5 +1,4 @@
 `include "Constants.vh"
-//Çú¿â
 module Song(
     input [`SONG_BITS-1:0] song,
     input [`SONG_CNT_BITS-1:0] cnt,
@@ -10,7 +9,6 @@ module Song(
     output reg [`FULL_NOTE_BITS-1:0] full_note
 );
 
-    //Ñ¡ÔñÇúÄ¿
     always @(song) begin
         case(song)
             `little_star: track <= 42;
@@ -19,10 +17,8 @@ module Song(
         endcase
     end
     
-    //ÀÖÆ×    
     always @(song, cnt) begin
         case(song)
-            //song1
             `little_star: begin
                 full_note = 3'b100;
                 case (cnt)
@@ -243,7 +239,6 @@ module Song(
                     end
                 endcase
             end
-            //song2
             `two_tigers: begin
                 full_note = 3'b100;
                 case(cnt) 

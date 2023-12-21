@@ -14,7 +14,6 @@ module Seventube(
     
     parameter period = 200000;//500HZ
     
-    //分频
     always @(posedge clk, negedge rst_n) begin
         if(~rst_n) begin
             cnt <= 0;
@@ -41,7 +40,6 @@ module Seventube(
         end
     end
     
-    //控制单块晶体管组
     always @(scan_cnt) begin
         case(scan_cnt)
             3'b000:seg_en = 8'h01;
@@ -56,7 +54,6 @@ module Seventube(
         endcase
     end
     
-    //前四块晶体管显示
     always @(state,seg_en) begin
         case(state) 
             `free_mode:   
@@ -102,7 +99,6 @@ module Seventube(
         endcase
     end
     
-    //后四块晶体管显示
     always @(*) begin
         case(state)
             `free_mode:tube2 = 8'b00000000;

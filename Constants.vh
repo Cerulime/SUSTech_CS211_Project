@@ -30,7 +30,7 @@
 `define la 5
 `define xi 6
 
-`define whole_note 0
+`define full_note 0
 `define half_note 1
 `define quarter_note 2
 `define eighth_note 3
@@ -38,7 +38,6 @@
 `define thirty_second_note 5
 `define sixty_fourth_note 6
 
-//¾§Ìå¹Ü
 `define zero 8'b11111100
 `define one 8'b01100000
 `define two 8'b11011010

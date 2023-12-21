@@ -16,13 +16,11 @@ wire [`LENGTH_BITS-1:0] length;
            clock, octave, note, length);
 wire en_sd_out;
 reg en_sd;
-    Pulse psd(clk, rst_n, en_hit, en_sd)_out;
+    Pulse psd(clk, rst_n, en_hit, en_sd_out);
 wire over;
-    Sound sd(clk, en_sd, octave, note, length, full_note, buzzer, over);
+    Sound sd(clk, en_sd, octave, note, length, 3'b100, buzzer, over);
     always @(*) begin
         en_sd <= en_sd_out | ~over;
     end
     Light lt(en_sd, note, led);
-
-    // TODO: VGA
 endmodule

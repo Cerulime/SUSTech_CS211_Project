@@ -1,8 +1,6 @@
 `include "Constants.vh"
 module Playmode(
     input clk, en, rst_n,
-    input [`NOTE_BITS-1:0] trans_note [`NOTE_KEY_BITS-1:0],
-    input [`LENGTH_BITS-1:0] trans_length [`LENGTH_KEY_BITS-1:0],
     input en_hit, oct_up, oct_down,
     input [`NOTE_KEY_BITS-1:0] note_key,
     input [`LENGTH_KEY_BITS-1:0] length_key,
@@ -25,7 +23,7 @@ wire [`NOTE_BITS-1:0] note;
 wire [`LENGTH_BITS-1:0] length;
 reg en_sd;
     Pulse pht(clk, rst_n, en_hit & can_hit, en_sd);
-    Hit ht(clk, en, rst_n, trans_note, trans_length, oct_up, oct_down, note_key, length_key, system_clock, 
+    Hit ht(clk, en, rst_n, oct_up, oct_down, note_key, length_key, system_clock, 
            clock, octave, note, length);
 wire [`FULL_NOTE_BITS-1:0] full_note;
 wire over;

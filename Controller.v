@@ -1,6 +1,7 @@
 `include "Constants.vh"
 module Controller (
-    input clk, rst_n, rw,
+    input clk, rst_n,
+    input submit,
     input oct_up, oct_down,
     input [`NOTE_KEY_BITS-1:0] note_key,
     input [`LENGTH_KEY_BITS-1:0] length_key,
@@ -14,36 +15,53 @@ module Controller (
 reg [20:0] microsecond;
 reg [`CLOCK_BITS-1:0] system_clock;
     always @(posedge clk) begin
-        if (en) begin
+        if (!rst_n) begin
+            microsecond <= 0;
+            system_clock <= 0;
+        end else begin
             if (microsecond < 100000) begin
                 microsecond <= microsecond + 1;
             end else begin
                 microsecond <= 0;
                 system_clock <= system_clock + 1;
             end
-        end else begin
-            microsecond <= 0;
-            system_clock <= 0;
         end
     end
-reg [`NOTE_BITS-1:0] trans_note [`NOTE_KEY_BITS-1:0];
-reg [`LENGTH_BITS-1:0] trans_length [`LENGTH_KEY_BITS-1:0];
-integer i;
-    always @* begin
-        if (!rst_n) begin
-            for (i = 0; i < `NOTE_KEY_BITS-1; i = i + 1) begin
-                trans_note[i] = i;
-                trans_length[i] = i;
-            end
-        end else begin
-            if (rw) begin // TODO: write with pulse
-                for (i = 0; i < `NOTE_KEY_BITS-1; i = i + 1) begin
-                    if (note_key & (7'b1 << i))
-                        trans_note[i] = new_note;
-                    if (length_key & (7'b1 << i))
-                        trans_length[i] = new_length;
+wire rw0, rw1;
+    assign rw0 = rw & (mode == `set);
+    assign rw1 = rw & (mode == `set);
+wire [`NOTE_KEY_BITS-1:0] addr0;
+wire [`LENGTH_KEY_BITS-1:0] addr1;
+    assign addr0 = note_key;
+    assign addr1 = length_key;
+wire [`NOTE_KEY_BITS-1:0] in0;
+wire [`LENGTH_KEY_BITS-1:0] in1;
+wire [`NOTE_KEY_BITS-1:0] trans_note;
+wire [`LENGTH_KEY_BITS-1:0] trans_length;
+    RAM ram(rst_n, rw0, rw1, addr0, addr1, in0, in1, trans_note, trans_length);
+wire en_set;
+    Pulse pht(clk, rst_n, submit, en_set);
+reg setted;
+reg [`NOTE_BITS-1:0] cnt;
+    always @(*) begin
+        case(mode)
+            `set: begin // TODO: reset cnt when mode changed
+                if (en_set) begin
+                    if (!setted && cnt < `NOTE_KEY_BITS) begin
+                        rw0 = 1;
+                        rw1 = 1;
+                        in0 = (7'b1 << cnt);
+                        in1 = (7'b1 << cnt);
+                        setted = 1;
+                        cnt = cnt + 1;
+                    end else begin
+                        rw0 = 0;
+                        rw1 = 0;
+                    end
+                end else begin
+                    setted = 0;
                 end
             end
-        end
+        endcase
     end
 endmodule

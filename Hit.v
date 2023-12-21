@@ -1,6 +1,8 @@
 `include "Constants.vh"
 module Hit(
     input clk, en, rst_n,
+    input [`NOTE_BITS-1:0] trans_note [`NOTE_KEY_BITS-1:0],
+    input [`LENGTH_BITS-1:0] trans_length [`LENGTH_KEY_BITS-1:0],
     input oct_up, oct_down,
     input [`NOTE_KEY_BITS-1:0] note_key,
     input [`LENGTH_KEY_BITS-1:0] length_key,
@@ -26,10 +28,10 @@ integer i;
         endcase
         for (i = 0; i < `NOTE_KEY_BITS-1; i = i + 1) begin
             if (note_key & (7'b1 << i)) begin
-                now_note = i;
+                now_note = trans_note[i];
             end
             if (length_key & (7'b1 << i)) begin
-                now_length = i;
+                now_length = trans_length[i];
             end
         end
     end

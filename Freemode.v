@@ -25,6 +25,4 @@ wire over;
         en_sd <= en_sd_out | ~over;
     end
     Light lt(en_sd, note, led);
-
-    // TODO: VGA
 endmodule

@@ -25,7 +25,7 @@ assign center[3] = 286344;
 assign center[4] = 255102;
 assign center[5] = 227273;
 assign center[6] = 202478;
-wire [20:0] pwm;
+reg [20:0] pwm;
     always @(octave) begin
         case (octave)
             3'b000: pwm = center[note] * 16;
@@ -49,13 +49,10 @@ reg buzz_state;
                 pwm_counter <= 0;
                 buzz_state <= ~buzz_state;
             end else begin
-                pwm_counter <= pwm_counter + 1;
+                pwm_counter <= pwm_counter + ~over;
             end
 
             if(length_counter >= (full_note * 100000000 / pow[length])) begin
-                pwm_counter <= 0;
-                length_counter <= 0;
-                buzz_state <= 0;
                 over <= 1;
             end else begin
                 length_counter <= length_counter + 1;
@@ -69,6 +66,6 @@ reg buzz_state;
         end
     end
 
-    assign buzzer = buzz_state;
+    assign buzzer = buzz_state & ~over;
 
 endmodule

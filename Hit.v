@@ -24,14 +24,26 @@ integer i;
             2'b10: now_octave = now_octave + 1;
             default: now_octave = now_octave;
         endcase
-        for (i = 0; i < `NOTE_KEY_BITS-1; i = i + 1) begin
-            if (note_key & (7'b1 << i)) begin
-                now_note = i;
-            end
-            if (length_key & (7'b1 << i)) begin
-                now_length = i;
-            end
-        end
+        case (note_key)
+            7'b0000001: now_note = 0;
+            7'b0000010: now_note = 1;
+            7'b0000100: now_note = 2;
+            7'b0001000: now_note = 3;
+            7'b0010000: now_note = 4;
+            7'b0100000: now_note = 5;
+            7'b1000000: now_note = 6;
+            default: now_note = now_note;
+        endcase
+        case(now_length)
+            7'b0000001: now_length = 0;
+            7'b0000010: now_length = 1;
+            7'b0000100: now_length = 2;
+            7'b0001000: now_length = 3;
+            7'b0010000: now_length = 4;
+            7'b0100000: now_length = 5;
+            7'b1000000: now_length = 6;
+            default: now_length = now_length;
+        endcase
     end
     always @(posedge clk) begin
         if (en) begin

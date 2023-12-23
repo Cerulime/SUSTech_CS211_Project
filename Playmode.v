@@ -11,6 +11,7 @@ module Playmode(
     output [`NOTE_KEY_BITS-1:0] note_led,
     output [6:0] level_led,
     output buzzer,
+    output [`TUBE_BITS-1:0] seg_en,
     output ctr1,
     output [`TUBE_BITS-1:0] tube1,
     output ctr2,
@@ -74,7 +75,7 @@ wire [2:0] level;
     Light llt( en, level, level_led);
     Scoreboard sb(clk, en, 
                   combo, mod, difficutly, base_score, bonus_score, acc, level, 
-                  ctr1, tube1, ctr2, tube2);
+                  seg_en, ctr1, tube1, ctr2, tube2);
     always @(posedge clk) begin
         if (en) begin
             if (over) begin

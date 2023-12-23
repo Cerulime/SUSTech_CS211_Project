@@ -13,8 +13,8 @@
 `define SCORE_BITS 21
 `define REC_CNT_BITS 6
 
-`define free_mode 0
-`define auto_mode 1
+`define free_mode 1
+`define auto_mode 2
 `define stdy_mode 3
 `define play_mode 4
 `define set 5

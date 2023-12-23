@@ -8,6 +8,7 @@ module Freemode (
     output [`NOTE_KEY_BITS-1:0] led,
     output buzzer
 );
+reg [`OCTAVE_BITS-1:0] octave_in;
 wire [`FULL_NOTE_BITS-1:0] full_note;
 wire [`CLOCK_BITS-1:0] clock;
 wire [`OCTAVE_BITS-1:0] octave;
@@ -16,6 +17,13 @@ wire [`LENGTH_BITS-1:0] length;
 assign full_note = 3'b100;
     Hit ht(clk, en, rst_n, oct_up, oct_down, note_key, length_key, system_clock, 
            clock, octave, note, length);
+    always @(negedge rst_n) begin
+        if (!rst_n) begin
+            octave_in <= 3'b100;
+        end else begin
+            octave_in <= octave;
+        end
+    end
 wire en_sd_out;
 reg en_sd;
     Pulse psd(clk, rst_n, en_hit, en_sd_out);

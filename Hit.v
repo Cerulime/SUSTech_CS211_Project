@@ -1,6 +1,7 @@
 `include "Constants.vh"
 module Hit(
     input clk, en, rst_n,
+    input [`OCTAVE_BITS-1:0] octave_in,
     input oct_up, oct_down,
     input [`NOTE_KEY_BITS-1:0] note_key,
     input [`LENGTH_KEY_BITS-1:0] length_key,
@@ -22,7 +23,7 @@ integer i;
         case ({pulse_up, pulse_down})
             2'b01: now_octave = now_octave - 1;
             2'b10: now_octave = now_octave + 1;
-            default: now_octave = now_octave;
+            default: now_octave = octave_in;
         endcase
         case (note_key)
             7'b0000001: now_note = 0;

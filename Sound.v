@@ -26,7 +26,7 @@ assign center[4] = 255102;
 assign center[5] = 227273;
 assign center[6] = 202478;
 reg [20:0] pwm;
-    always @(octave) begin
+    always @(*) begin
         case (octave)
             3'b000: pwm = center[note] * 16;
             3'b001: pwm = center[note] * 8;

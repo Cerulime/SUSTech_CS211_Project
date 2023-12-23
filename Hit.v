@@ -34,7 +34,7 @@ integer i;
             7'b1000000: now_note = 6;
             default: now_note = now_note;
         endcase
-        case(now_length)
+        case (length_key)
             7'b0000001: now_length = 0;
             7'b0000010: now_length = 1;
             7'b0000100: now_length = 2;

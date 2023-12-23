@@ -49,7 +49,7 @@ reg buzz_state;
                 pwm_counter <= 0;
                 buzz_state <= ~buzz_state;
             end else begin
-                pwm_counter <= pwm_counter + ~over;
+                pwm_counter <= pwm_counter + (1-over);
             end
 
             if(length_counter >= (full_note * 100000000 / pow[length])) begin

@@ -11,20 +11,11 @@ module Hit(
     output [`NOTE_BITS-1:0] note,
     output [`LENGTH_BITS-1:0] length
 );
-wire pulse_up, pulse_down;
-    Pulse p_up(clk, rst_n, oct_up, pulse_up);
-    Pulse p_down(clk, rst_n, oct_down, pulse_down);
 reg [`OCTAVE_BITS-1:0] now_octave;
 reg [`NOTE_BITS-1:0] now_note;
 reg [`LENGTH_BITS-1:0] now_length;
 reg [`CLOCK_BITS-1:0] now_clock;
-integer i;
     always @(*) begin
-        case ({pulse_up, pulse_down})
-            2'b01: now_octave = now_octave - 1;
-            2'b10: now_octave = now_octave + 1;
-            default: now_octave = octave_in;
-        endcase
         case (note_key)
             7'b0000001: now_note = 0;
             7'b0000010: now_note = 1;
@@ -46,12 +37,21 @@ integer i;
             default: now_length = now_length;
         endcase
     end
+wire pulse_up, pulse_down;
+    Pulse p_up(clk, rst_n, oct_up, pulse_up);
+    Pulse p_down(clk, rst_n, oct_down, pulse_down);
     always @(posedge clk) begin
         if (en) begin
             if (now_clock == 0)
                 now_clock <= system_clock;
+            case ({pulse_up, pulse_down})
+                2'b01: now_octave = now_octave - 1;
+                2'b10: now_octave = now_octave + 1;
+                default: now_octave = now_octave;
+            endcase
         end else begin
             now_clock <= 0;
+            now_octave <= octave_in;
         end
     end
     assign octave = now_octave;

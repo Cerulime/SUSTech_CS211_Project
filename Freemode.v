@@ -15,13 +15,13 @@ wire [`OCTAVE_BITS-1:0] octave;
 wire [`NOTE_BITS-1:0] note;
 wire [`LENGTH_BITS-1:0] length;
 assign full_note = 3'b100;
-    Hit ht(clk, en, rst_n, oct_up, oct_down, note_key, length_key, system_clock, 
+    Hit ht(clk, en, rst_n, octave_in, oct_up, oct_down, note_key, length_key, system_clock, 
            clock, octave, note, length);
-    always @(negedge rst_n) begin
-        if (!rst_n) begin
-            octave_in <= 3'b100;
+    always @(*) begin
+        if (en) begin
+            octave_in = octave;
         end else begin
-            octave_in <= octave;
+            octave_in = 3'b100;
         end
     end
 wire en_sd_out;

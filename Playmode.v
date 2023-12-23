@@ -25,8 +25,16 @@ wire [`LENGTH_BITS-1:0] length;
 wire en_sd_out;
 reg en_sd;
     Pulse pht(clk, rst_n, en_hit & can_hit, en_sd_out);
-    Hit ht(clk, en, rst_n, oct_up, oct_down, note_key, length_key, system_clock, 
+reg [`OCTAVE_BITS-1:0] octave_in;
+    Hit ht(clk, en, rst_n, octave_in, oct_up, oct_down, note_key, length_key, system_clock, 
            clock, octave, note, length);
+    always @(*) begin
+        if (en) begin
+            octave_in = octave;
+        end else begin
+            octave_in = 3'b100;
+        end
+    end
 wire [`FULL_NOTE_BITS-1:0] full_note;
 wire over;
     Sound sd(clk, en_sd, octave, note, length, full_note, buzzer, over);

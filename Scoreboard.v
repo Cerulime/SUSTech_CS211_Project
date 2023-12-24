@@ -9,9 +9,7 @@ module Scoreboard(
     input [20:0] acc,
     input [2:0] level,
     output reg [`TUBE_BITS-1:0] seg_en,
-    output reg ctr1,
     output reg [`TUBE_BITS-1:0] tube1,
-    output reg ctr2,
     output reg [`TUBE_BITS-1:0] tube2
 );
 reg add_cnt, add_cnt2;
@@ -64,16 +62,6 @@ reg [20:0] temp;
             3'b101:seg_en = 8'h20;
             3'b110:seg_en = 8'h40;
             3'b111:seg_en = 8'h80;
-        endcase
-        case(seg_en)
-            8'h01:begin ctr1 = 1; ctr2 = 0; end
-            8'h02:begin ctr1 = 1; ctr2 = 0; end
-            8'h04:begin ctr1 = 1; ctr2 = 0; end
-            8'h08:begin ctr1 = 1; ctr2 = 0; end
-            8'h10:begin ctr1 = 0; ctr2 = 1; end
-            8'h20:begin ctr1 = 0; ctr2 = 1; end
-            8'h40:begin ctr1 = 0; ctr2 = 1; end
-            8'h80:begin ctr1 = 0; ctr2 = 1; end
         endcase
         case(seg_en)
             8'h01:tube1 = t0;

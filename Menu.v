@@ -3,7 +3,6 @@ module Menu(
     input clk, rst_n,
     input [`STATE_BITS-1:0] state,
     input [`SONG_BITS-1:0] song,
-    output ctr1, ctr2,
     output reg [`TUBE_BITS-1:0] seg_en,
     output reg [`TUBE_BITS-1:0] tube1,
     output reg [`TUBE_BITS-1:0] tube2
@@ -41,14 +40,14 @@ module Menu(
     
     always @(scan_cnt) begin
         case(scan_cnt)
-            3'b000:begin seg_en = 8'h01; ctr1 = 1'b1; ctr2 = 1'b0; end
-            3'b001:begin seg_en = 8'h02; ctr1 = 1'b1; ctr2 = 1'b0; end
-            3'b010:begin seg_en = 8'h04; ctr1 = 1'b1; ctr2 = 1'b0; end
-            3'b011:begin seg_en = 8'h08; ctr1 = 1'b1; ctr2 = 1'b0; end
-            3'b100:begin seg_en = 8'h10; ctr1 = 1'b0; ctr2 = 1'b1; end
-            3'b101:begin seg_en = 8'h20; ctr1 = 1'b0; ctr2 = 1'b1; end
-            3'b110:begin seg_en = 8'h40; ctr1 = 1'b0; ctr2 = 1'b1; end
-            3'b111:begin seg_en = 8'h80; ctr1 = 1'b0; ctr2 = 1'b1; end
+            3'b000:seg_en = 8'h01;
+            3'b001:seg_en = 8'h02;
+            3'b010:seg_en = 8'h04;
+            3'b011:seg_en = 8'h08;
+            3'b100:seg_en = 8'h10;
+            3'b101:seg_en = 8'h20;
+            3'b110:seg_en = 8'h40;
+            3'b111:seg_en = 8'h80;
         endcase
     end
     

@@ -7,9 +7,7 @@ module Controller (
     input [`LENGTH_KEY_BITS-1:0] length_key,
     input reset, is_rw,
     output reg buzzer,
-    output reg ctr1,
     output reg [`TUBE_BITS-1:0] tube1,
-    output reg ctr2,
     output reg [`TUBE_BITS-1:0] tube2,
     output reg [`TUBE_BITS-1:0] seg_en,
     output [`NOTE_KEY_BITS-1:0] led,
@@ -45,9 +43,8 @@ reg en_sd, over;
 
 reg [`STATE_BITS-1:0] state;
 reg [`SONG_BITS-1:0] song;
-wire mn_ctr1, mn_ctr2;
 wire [`TUBE_BITS-1:0] mn_seg_en, mn_tube1, mn_tube2;
-    Menu menu(clk, rst_n, state, song, mn_ctr1, mn_ctr2, mn_seg_en, mn_tube1, mn_tube2);
+    Menu menu(clk, rst_n, state, song, mn_seg_en, mn_tube1, mn_tube2);
 
 wire Auto_buzzer, Free_buzzer, Play_buzzer, Stdy_buzzer;
 wire [`NOTE_KEY_BITS-1:0] Auto_led, Free_led, Play_led, Stdy_led;
@@ -55,7 +52,6 @@ reg en_Auto, en_Free, en_Play, en_Stdy, en_Set;
     Automode automode(clk, en_Auto, song, Auto_led, Auto_buzzer);
     Freemode freemode(clk, en_Free, rst_n, submit, oct_up, oct_down, note_key, length_key, system_clock,
                       Free_led, Free_buzzer);
-wire pl_ctr1, pl_ctr2;
 reg [1:0] mod;
 reg [3:0] difficutly;
 wire pulse_up, pulse_down;
@@ -64,7 +60,7 @@ wire pulse_up, pulse_down;
 reg pulse_ack;
 wire [`TUBE_BITS-1:0] pl_seg_en, pl_tube1, pl_tube2;
     Playmode playmode(clk, en_Play, rst_n, submit, oct_up, oct_down, note_key, length_key, system_clock,
-                      song, mod, difficutly, Play_led, led_aux, Play_buzzer, pl_seg_en, pl_ctr1, pl_tube1, pl_ctr2, pl_tube2);
+                      song, mod, difficutly, Play_led, led_aux, Play_buzzer, pl_seg_en, pl_tube1, pl_tube2);
     Stdymode stdymode(clk, en_Stdy, rst_n, submit, oct_up, oct_down, note_key, length_key, system_clock,
                       song, reset, is_rw, Stdy_led, Stdy_buzzer);
 
@@ -108,8 +104,6 @@ wire [`TUBE_BITS-1:0] pl_seg_en, pl_tube1, pl_tube2;
                     `free_mode: begin
                         led <= Free_led;
                         buzzer <= Free_buzzer;
-                        ctr1 <= mn_ctr1;
-                        ctr2 <= mn_ctr2;
                         seg_en <= mn_seg_en;
                         tube1 <= mn_tube1;
                         tube2 <= mn_tube2;
@@ -127,8 +121,6 @@ wire [`TUBE_BITS-1:0] pl_seg_en, pl_tube1, pl_tube2;
                             en_Auto <= 1;
                             led <= Auto_led;
                             buzzer <= Auto_buzzer;
-                            ctr1 <= mn_ctr1;
-                            ctr2 <= mn_ctr2;
                             seg_en <= mn_seg_en;
                             tube1 <= mn_tube1;
                             tube2 <= mn_tube2;
@@ -147,8 +139,6 @@ wire [`TUBE_BITS-1:0] pl_seg_en, pl_tube1, pl_tube2;
                             en_Stdy <= 1;
                             led <= Stdy_led;
                             buzzer <= Stdy_buzzer;
-                            ctr1 <= mn_ctr1;
-                            ctr2 <= mn_ctr2;
                             seg_en <= mn_seg_en;
                             tube1 <= mn_tube1;
                             tube2 <= mn_tube2;
@@ -185,8 +175,6 @@ wire [`TUBE_BITS-1:0] pl_seg_en, pl_tube1, pl_tube2;
                             en_Play <= 1;
                             led <= Play_led;
                             buzzer <= Play_buzzer;
-                            ctr1 <= pl_ctr1;
-                            ctr2 <= pl_ctr2;
                             seg_en <= pl_seg_en;
                             tube1 <= pl_tube1;
                             tube2 <= pl_tube2;

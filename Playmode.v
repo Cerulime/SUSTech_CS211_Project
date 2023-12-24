@@ -9,13 +9,13 @@ module Playmode(
     input [1:0] mod,
     input [3:0] difficutly,
     output [`NOTE_KEY_BITS-1:0] note_led,
-    output [6:0] level_led,
+    output [`NOTE_KEY_BITS-1:0] level_led,
     output buzzer,
     output [`TUBE_BITS-1:0] seg_en,
     output ctr1,
     output [`TUBE_BITS-1:0] tube1,
     output ctr2,
-    output [`TUBE_BITS:0] tube2
+    output [`TUBE_BITS-1:0] tube2
 );
 reg can_hit;
 wire [`CLOCK_BITS-1:0] clock;
@@ -39,7 +39,7 @@ wire [`FULL_NOTE_BITS-1:0] full_note;
 wire over;
     Sound sd(clk, en_sd, octave, note, length, full_note, buzzer, over);
     always @(*) begin
-        en_sd <= en_sd_out | ~over;
+        en_sd = en_sd_out | ~over;
     end
 reg [`SONG_BITS-1:0] song_input;
 reg [`SONG_CNT_BITS-1:0] cnt;
@@ -80,7 +80,7 @@ wire [2:0] level;
                goal_clock, goal_octave, goal_note, goal_length, 
                last_combo, cnt, track, mod, difficutly, base_score, 
                base_temp, bonus_temp, combo, acc, level);
-    Light llt( en, level, level_led);
+    Light llt(en, level, level_led);
     Scoreboard sb(clk, en, 
                   combo, mod, difficutly, base_score, bonus_score, acc, level, 
                   seg_en, ctr1, tube1, ctr2, tube2);

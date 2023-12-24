@@ -9,10 +9,10 @@ module Scoreboard(
     input [20:0] acc,
     input [2:0] level,
     output reg [`TUBE_BITS-1:0] seg_en,
-    output ctr1,
-    output [`TUBE_BITS-1:0] tube1,
-    output ctr2,
-    output [`TUBE_BITS-1:0] tube2
+    output reg ctr1,
+    output reg [`TUBE_BITS-1:0] tube1,
+    output reg ctr2,
+    output reg [`TUBE_BITS-1:0] tube2
 );
 reg add_cnt, add_cnt2;
 reg [20:0] cycle_cnt, reflesh_cnt, title_cnt, time_cnt;

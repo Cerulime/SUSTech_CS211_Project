@@ -407,7 +407,7 @@ module Song(
                     note = 3'b000;
                     length = 3'b000;
                 end   
-            endcase
+                endcase
             end
             default: begin
                 octave <= 3'b100;

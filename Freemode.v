@@ -30,7 +30,7 @@ reg en_sd;
 wire over;
     Sound sd(clk, en_sd, octave, note, length, full_note, buzzer, over);
     always @(*) begin
-        en_sd <= en_sd_out | ~over;
+        en_sd = en_sd_out | ~over;
     end
     Light lt(en_sd, note, led);
 endmodule

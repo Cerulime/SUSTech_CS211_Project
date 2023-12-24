@@ -40,18 +40,25 @@ reg [`CLOCK_BITS-1:0] now_clock;
 wire pulse_up, pulse_down;
     Pulse p_up(clk, rst_n, oct_up, pulse_up);
     Pulse p_down(clk, rst_n, oct_down, pulse_down);
+reg pulse_ack;
     always @(posedge clk) begin
         if (en) begin
             if (now_clock == 0)
                 now_clock <= system_clock;
-            case ({pulse_up, pulse_down})
-                2'b01: now_octave = now_octave - 1;
-                2'b10: now_octave = now_octave + 1;
-                default: now_octave = now_octave;
-            endcase
+            if (!pulse_ack) begin
+                case ({pulse_up, pulse_down})
+                    2'b01: now_octave = now_octave - 1;
+                    2'b10: now_octave = now_octave + 1;
+                    default: now_octave = now_octave;
+                endcase
+                pulse_ack <= pulse_up | pulse_down;
+            end else begin
+                pulse_ack <= pulse_up | pulse_down
+            end
         end else begin
             now_clock <= 0;
             now_octave <= octave_in;
+            pulse_ack <= 0;
         end
     end
     assign octave = now_octave;

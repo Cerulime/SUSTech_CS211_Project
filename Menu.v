@@ -1,11 +1,12 @@
 `include "Constants.vh"
 module Menu(
     input clk, rst_n,
-    input [2:0] state,
-    input [2:0] song,
-    output reg [7:0] seg_en,
-    output reg [7:0] tube1,
-    output reg [7:0] tube2
+    input [`STATE_BITS-1:0] state,
+    input [`SONG_BITS-1:0] song,
+    output ctr1, ctr2,
+    output reg [`TUBE_BITS-1:0] seg_en,
+    output reg [`TUBE_BITS-1:0] tube1,
+    output reg [`TUBE_BITS-1:0] tube2
 );
 
     reg clkout;
@@ -40,19 +41,31 @@ module Menu(
     
     always @(scan_cnt) begin
         case(scan_cnt)
-            3'b000:seg_en = 8'h01;
-            3'b001:seg_en = 8'h02;
-            3'b010:seg_en = 8'h04;
-            3'b011:seg_en = 8'h08;
-            3'b100:seg_en = 8'h10;
-            3'b101:seg_en = 8'h20;
-            3'b110:seg_en = 8'h40;
-            3'b111:seg_en = 8'h80;
+            3'b000:begin seg_en = 8'h01; ctr1 = 1'b1; ctr2 = 1'b0; end
+            3'b001:begin seg_en = 8'h02; ctr1 = 1'b1; ctr2 = 1'b0; end
+            3'b010:begin seg_en = 8'h04; ctr1 = 1'b1; ctr2 = 1'b0; end
+            3'b011:begin seg_en = 8'h08; ctr1 = 1'b1; ctr2 = 1'b0; end
+            3'b100:begin seg_en = 8'h10; ctr1 = 1'b0; ctr2 = 1'b1; end
+            3'b101:begin seg_en = 8'h20; ctr1 = 1'b0; ctr2 = 1'b1; end
+            3'b110:begin seg_en = 8'h40; ctr1 = 1'b0; ctr2 = 1'b1; end
+            3'b111:begin seg_en = 8'h80; ctr1 = 1'b0; ctr2 = 1'b1; end
         endcase
     end
     
     always @(state,seg_en) begin
         case(state) 
+            `menu_mode:
+                case(seg_en)
+                    8'h01:tube1 = `S;
+                    8'h02:tube1 = `t;
+                    8'h04:tube1 = `A;
+                    8'h08:tube1 = `r;
+                    8'h10:tube2 = `t;
+                    default: begin
+                        tube1 = `emp;
+                        tube2 = `emp;
+                    end
+                endcase
             `free_mode:   
                 case(seg_en)
                     8'h01:tube1 = `F;

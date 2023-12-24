@@ -8,11 +8,7 @@ module Stdymode(
     input [`SONG_BITS-1:0] song,
     input is_record, is_rw,
     output [`NOTE_KEY_BITS-1:0] note_led,
-    output buzzer,
-    output ctr1,
-    output [`TUBE_BITS-1:0] tube1,
-    output ctr2,
-    output [`TUBE_BITS-1:0] tube2
+    output buzzer
 );
 wire [`CLOCK_BITS-1:0] clock;
 wire [`OCTAVE_BITS-1:0] octave;
@@ -35,7 +31,7 @@ wire [`FULL_NOTE_BITS-1:0] full_note;
 wire over;
     Sound sd(clk, en_sd, octave, note, length, full_note, buzzer, over);
     always @(*) begin
-        en_sd <= en_sd_out | ~over;
+        en_sd = en_sd_out | ~over;
     end
 reg [`SONG_BITS-1:0] song_input;
 reg [`SONG_CNT_BITS-1:0] cnt;
@@ -53,6 +49,7 @@ wire [`FULL_NOTE_BITS-1:0] rec_full_note;
     Record rc(is_rw, en_rec, rec_cnt, octave, note, length, full_note, 
               rec_octave, rec_note, rec_length, rec_full_note);
     Light nlt(en_sd, goal_note, note_led);
+reg can_add;
     always @(posedge clk) begin
         if (en) begin
             if (!is_record) begin
@@ -74,10 +71,18 @@ wire [`FULL_NOTE_BITS-1:0] rec_full_note;
                     end else begin
                         en_rec <= 0;
                     end
-                    if (rec_cnt < (1<<`REC_CNT_BITS)-1) begin
-                        rec_cnt <= rec_cnt + 1;
+                    if (en_sd_out) begin
+                        if (can_add) begin
+                            if (rec_cnt < (1<<`REC_CNT_BITS)-1) begin
+                                rec_cnt <= rec_cnt + can_add;
+                                can_add <= 0;
+                            end else begin
+                                rec_cnt <= 0;
+                                can_add <= 0;
+                            end
+                        end
                     end else begin
-                        rec_cnt <= 0;
+                        can_add <= 1;
                     end
                 end else begin
                     en_rec <= 1;

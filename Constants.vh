@@ -12,13 +12,16 @@
 `define SONG_CNT_BITS 21
 `define SCORE_BITS 21
 `define REC_CNT_BITS 6
+`define STATE_BITS 3
 
+`define menu_mode 0
 `define free_mode 1
 `define auto_mode 2
 `define stdy_mode 3
 `define play_mode 4
 `define set 5
 
+`deinfe no_song 0
 `define little_star 1
 `define two_tigers 2
 

@@ -58,9 +58,10 @@ wire pulse_up, pulse_down;
     Pulse p_up(clk, rst_n, oct_up, pulse_up);
     Pulse p_down(clk, rst_n, oct_down, pulse_down);
 reg pulse_ack;
+reg [`USER_BITS-1:0] user;
 wire [`TUBE_BITS-1:0] pl_seg_en, pl_tube1, pl_tube2;
     Playmode playmode(clk, en_Play, rst_n, submit, oct_up, oct_down, note_key, length_key, system_clock,
-                      song, mod, difficutly, Play_led, led_aux, Play_buzzer, pl_seg_en, pl_tube1, pl_tube2);
+                      song, user, mod, difficutly, Play_led, led_aux, Play_buzzer, pl_seg_en, pl_tube1, pl_tube2);
     Stdymode stdymode(clk, en_Stdy, rst_n, submit, oct_up, oct_down, note_key, length_key, system_clock,
                       song, reset, is_rw, Stdy_led, Stdy_buzzer);
 
@@ -161,6 +162,8 @@ wire [`TUBE_BITS-1:0] pl_seg_en, pl_tube1, pl_tube2;
                                 case(note_key)
                                     7'b0000001: song <= `little_star;
                                     7'b0000010: song <= `two_tigers;
+                                    7'b1000000: user <= 1;
+                                    7'b0100000: user <= 2;
                                     default: song <= `no_song;
                                 endcase
                                 case(length_key)

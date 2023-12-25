@@ -35,8 +35,16 @@ reg [`OCTAVE_BITS-1:0] octave_in;
         end
     end
 wire [`FULL_NOTE_BITS-1:0] full_note;
+reg [`FULL_NOTE_BITS-1:0] full_note_mod;
+    always @(*) begin
+        case (full_note)
+            2'b10: full_note_mod = full_note * 2; // Half Time
+            2'b11: full_note_mod = full_note / 2; // Double Time
+            default: full_note_mod = full_note;
+        endcase
+    end
 wire over;
-    Sound sd(clk, en_sd, octave, note, length, full_note, buzzer, over);
+    Sound sd(clk, en_sd, octave, note, length, full_note_mod, buzzer, over);
     always @(*) begin
         en_sd = en_sd_out | ~over;
     end

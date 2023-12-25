@@ -50,7 +50,7 @@ wire Auto_buzzer, Free_buzzer, Play_buzzer, Stdy_buzzer;
 wire [`NOTE_KEY_BITS-1:0] Auto_led, Free_led, Play_led, Stdy_led;
 reg en_Auto, en_Free, en_Play, en_Stdy, en_Set;
     Automode automode(clk, en_Auto, song, Auto_led, Auto_buzzer);
-    Freemode freemode(clk, en_Free, rst_n, submit, oct_up, oct_down, note_key, length_key, system_clock,
+    Freemode freemode(clk, en_Free, rst_n, submit, oct_up, oct_down, trans_note, length_key, system_clock,
                       Free_led, Free_buzzer);
 reg [1:0] mod;
 reg [3:0] difficutly;
@@ -60,9 +60,9 @@ wire pulse_up, pulse_down;
 reg pulse_ack;
 reg [`USER_BITS-1:0] user;
 wire [`TUBE_BITS-1:0] pl_seg_en, pl_tube1, pl_tube2;
-    Playmode playmode(clk, en_Play, rst_n, submit, oct_up, oct_down, note_key, length_key, system_clock,
+    Playmode playmode(clk, en_Play, rst_n, submit, oct_up, oct_down, trans_note, length_key, system_clock,
                       song, user, mod, difficutly, Play_led, led_aux, Play_buzzer, pl_seg_en, pl_tube1, pl_tube2);
-    Stdymode stdymode(clk, en_Stdy, rst_n, submit, oct_up, oct_down, note_key, length_key, system_clock,
+    Stdymode stdymode(clk, en_Stdy, rst_n, submit, oct_up, oct_down, trans_note, length_key, system_clock,
                       song, reset, is_rw, Stdy_led, Stdy_buzzer);
 
     always @(posedge clk, negedge rst_n) begin

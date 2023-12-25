@@ -39,30 +39,35 @@ reg add_cnt, add_cnt2;
 reg [20:0] cycle_cnt, reflesh_cnt, title_cnt, time_cnt;
     always @(posedge clk) begin
         if (en) begin
-            cycle_cnt <= cycle_cnt + 1;
             if (cycle_cnt == 200000) begin
                 cycle_cnt <= 0;
                 add_cnt <= 1;
-            end
-            if (reflesh_cnt == 7) begin
-                reflesh_cnt <= 0;
-                add_cnt <= 0;
-                time_cnt <= time_cnt + 1;
             end else begin
-                reflesh_cnt <= reflesh_cnt + add_cnt;
-                add_cnt <= 0;
-                time_cnt <= time_cnt + 1;
+                cycle_cnt <= cycle_cnt + 1;
             end
-            if (time_cnt == 125) begin
-                add_cnt2 <= 1;
-                time_cnt <= 0;
+            if (add_cnt == 1) begin
+                if (time_cnt == 125) begin
+                    add_cnt2 <= 1;
+                    time_cnt <= 0;
+                end else begin
+                    time_cnt <= time_cnt + 1;
+                end
+                if (reflesh_cnt == 7) begin
+                    reflesh_cnt <= 0;
+                    add_cnt <= 0;
+                end else begin
+                    reflesh_cnt <= reflesh_cnt + 1'b1;
+                    add_cnt <= 0;
+                end
             end
-            if (title_cnt == 7) begin
-                title_cnt <= 0;
-                add_cnt2 <= 0;
-            end else begin
-                title_cnt <= title_cnt + add_cnt2;
-                add_cnt2 <= 0;
+            if (add_cnt2 == 1) begin
+                if (title_cnt == 7) begin
+                    title_cnt <= 0;
+                    add_cnt2 <= 0;
+                end else begin
+                    title_cnt <= title_cnt + 1'b1;
+                    add_cnt2 <= 0;
+                end
             end
         end else begin
             add_cnt <= 0;
@@ -119,6 +124,9 @@ reg [20:0] temp;
             end
             3'b110:begin
                 temp = level;
+            end
+            default:begin
+                temp = 0;
             end
         endcase
     end

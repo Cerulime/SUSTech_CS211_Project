@@ -17,7 +17,7 @@
  */
 `include "Constants.vh"
 module Decompose(
-    input [20:0] x,
+    input [`MAX_NUM-1:0] x,
     output reg [`TUBE_BITS-1:0] l0, l1, l2, l3, l4, l5, l6, l7
 );
 reg [3:0] r0, r1, r2, r3, r4, r5, r6, r7;

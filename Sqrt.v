@@ -6,11 +6,12 @@
  * Outputs:
  *   - y: 21-bit output value representing the square root of x
  */
+`include "Constants.vh"
 module Sqrt(
-    input [20:0] x,
-    output [20:0] y
+    input [`MAX_NUM-1:0] x,
+    output [`MAX_NUM-1:0] y
 );
-    // reg [20:0] last, square;
+    // reg [`MAX_NUM-1:0] last, square;
     // integer i;
     // always @* begin
     //     last = 0;
@@ -24,7 +25,7 @@ module Sqrt(
     //     end
     // end
     // assign y = last;
-    reg [20:0] ans;
+    reg [`MAX_NUM-1:0] ans;
     always @(*) begin
         if (x == 0)
             ans = 0;

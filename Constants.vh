@@ -14,6 +14,7 @@
 `define REC_CNT_BITS 6
 `define STATE_BITS 3
 `define USER_BITS 2
+`define MAX_NUM 32
 
 `define menu_mode 0
 `define free_mode 1

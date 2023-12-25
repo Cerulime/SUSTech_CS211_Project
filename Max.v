@@ -1,6 +1,7 @@
+`include "Constants.vh"
 module Max(
-    input [20:0] x, y,
-    output [20:0] z
+    input [`MAX_NUM-1:0] x, y,
+    output [`MAX_NUM-1:0] z
 );
     assign z = x > y ? x : y;
 endmodule

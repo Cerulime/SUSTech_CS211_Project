@@ -101,9 +101,9 @@ reg [`CLOCK_BITS-1:0] goal_clock;
             goal_clock <= 0;
         end
     end
-reg [20:0] base_score, bonus_score, last_combo;
-wire [20:0] base_temp, bonus_temp, combo;
-wire [20:0] acc;
+reg [`MAX_NUM-1:0] base_score, bonus_score, last_combo;
+wire [`MAX_NUM-1:0] base_temp, bonus_temp, combo;
+wire [`MAX_NUM-1:0] acc;
 wire [2:0] level;
     Scoring sc(clock, octave, note, length, 
                goal_clock, goal_octave, goal_note, goal_length, 
@@ -129,29 +129,34 @@ wire [`TUBE_BITS-1:0] usr_seg_en, usr_tube1, usr_tube2;
             tube2 = pl_tube2;
         end
     end
+reg can_add;
     always @(posedge clk) begin
         if (en) begin
-            if (over) begin
-                base_score = base_score + base_temp;
-                bonus_score = bonus_score + bonus_temp;
-                last_combo = combo;
+            if (over & can_add) begin
+                base_score <= base_score + base_temp;
+                bonus_score <= bonus_score + bonus_temp;
+                last_combo <= combo;
+                can_add <= 0;
+            end else if (!over) begin
+                can_add <= 1;
             end
         end else begin
-            base_score = 0;
-            bonus_score = 0;
-            last_combo = 0;
+            base_score <= 0;
+            bonus_score <= 0;
+            last_combo <= 0;
+            can_add <= 1;
         end
     end
-reg [20:0] combo_user [(1<<`USER_BITS)-1:0];
-reg [20:0] acc_user [(1<<`USER_BITS)-1:0];
+reg [`MAX_NUM-1:0] combo_user [(1<<`USER_BITS)-1:0];
+reg [`MAX_NUM-1:0] acc_user [(1<<`USER_BITS)-1:0];
 reg [2:0] level_user [(1<<`USER_BITS)-1:0];
-reg [20:0] base_score_user [(1<<`USER_BITS)-1:0];
-reg [20:0] bonus_score_user [(1<<`USER_BITS)-1:0];
-wire [20:0] combo_user_new;
-wire [20:0] acc_user_new;
+reg [`MAX_NUM-1:0] base_score_user [(1<<`USER_BITS)-1:0];
+reg [`MAX_NUM-1:0] bonus_score_user [(1<<`USER_BITS)-1:0];
+wire [`MAX_NUM-1:0] combo_user_new;
+wire [`MAX_NUM-1:0] acc_user_new;
 wire [2:0] level_user_new;
-wire [20:0] base_score_user_new;
-wire [20:0] bonus_score_user_new;
+wire [`MAX_NUM-1:0] base_score_user_new;
+wire [`MAX_NUM-1:0] bonus_score_user_new;
     Max max_combo(combo_user[user], last_combo, combo_user_new);
     Max max_acc(acc_user[user], acc, acc_user_new);
     Max max_level({18'b0, level_user[user]}, level, level_user_new);

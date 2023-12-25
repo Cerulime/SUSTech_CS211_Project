@@ -24,19 +24,19 @@
 `include "Constants.vh"
 module Scoreboard(
     input clk, en,
-    input [20:0] combo,
+    input [`MAX_NUM-1:0] combo,
     input [1:0] mod,
     input [3:0] difficutly,
-    input [20:0] base_score,
-    input [20:0] bonus_score,
-    input [20:0] acc,
+    input [`MAX_NUM-1:0] base_score,
+    input [`MAX_NUM-1:0] bonus_score,
+    input [`MAX_NUM-1:0] acc,
     input [2:0] level,
     output reg [`TUBE_BITS-1:0] seg_en,
     output reg [`TUBE_BITS-1:0] tube1,
     output reg [`TUBE_BITS-1:0] tube2
 );
 reg add_cnt, add_cnt2;
-reg [20:0] cycle_cnt, reflesh_cnt, title_cnt, time_cnt;
+reg [`MAX_NUM-1:0] cycle_cnt, reflesh_cnt, title_cnt, time_cnt;
     always @(posedge clk) begin
         if (en) begin
             if (cycle_cnt == 200000) begin
@@ -78,7 +78,7 @@ reg [20:0] cycle_cnt, reflesh_cnt, title_cnt, time_cnt;
         end
     end
 wire [`TUBE_BITS-1:0] t0, t1, t2, t3, t4, t5, t6, t7;
-reg [20:0] temp;
+reg [`MAX_NUM-1:0] temp;
     Decompose decompose(temp, t0, t1, t2, t3, t4, t5, t6, t7);
     always @(*) begin
         case(reflesh_cnt)
@@ -92,14 +92,14 @@ reg [20:0] temp;
             3'b111:seg_en = 8'h80;
         endcase
         case(seg_en)
-            8'h01:tube1 = t0;
-            8'h02:tube1 = t1;
-            8'h04:tube1 = t2;
-            8'h08:tube1 = t3;
-            8'h10:tube2 = t4;
-            8'h20:tube2 = t5;
-            8'h40:tube2 = t6;
-            8'h80:tube2 = t7;
+            8'h01:tube1 = t7;
+            8'h02:tube1 = t6;
+            8'h04:tube1 = t5;
+            8'h08:tube1 = t4;
+            8'h10:tube2 = t3;
+            8'h20:tube2 = t2;
+            8'h40:tube2 = t1;
+            8'h80:tube2 = t0;
         endcase
     end
     always @(*) begin

@@ -34,16 +34,16 @@ module Scoring(
     input [`OCTAVE_BITS-1:0] goal_octave,
     input [`NOTE_BITS-1:0] goal_note,
     input [`LENGTH_BITS-1:0] goal_length,
-    input [20:0] last_combo,
-    input [20:0] now_cnt,
-    input [20:0] total_note,
+    input [`MAX_NUM-1:0] last_combo,
+    input [`MAX_NUM-1:0] now_cnt,
+    input [`MAX_NUM-1:0] total_note,
     input [1:0] mod,
     input [3:0] difficutly,
-    input [20:0] last_base_score,
-    output reg [20:0] base_score,
-    output reg [20:0] bonus_score,
-    output reg [20:0] combo,
-    output reg [20:0] acc,
+    input [`MAX_NUM-1:0] last_base_score,
+    output reg [`MAX_NUM-1:0] base_score,
+    output reg [`MAX_NUM-1:0] bonus_score,
+    output reg [`MAX_NUM-1:0] combo,
+    output reg [`MAX_NUM-1:0] acc,
     output reg [2:0] level
 );
 reg [6:0] mod_mutiplier, mod_divider;
@@ -67,12 +67,12 @@ reg [6:0] mod_mutiplier, mod_divider;
             end
         endcase
     end
-reg [20:0] hit_score;
-reg [20:0] hit_bonus;
-reg [20:0] timer;
-reg [20:0] one_hit_score;
+reg [`MAX_NUM-1:0] hit_score;
+reg [`MAX_NUM-1:0] hit_bonus;
+reg [`MAX_NUM-1:0] timer;
+reg [`MAX_NUM-1:0] one_hit_score;
 localparam P = 16, S = 64, A = 97, B = 127, C = 188;
-wire [20:0] sqrt_combo;
+wire [`MAX_NUM-1:0] sqrt_combo;
     Sqrt sqrt(combo, sqrt_combo);
     always @(*) begin
         if (clock < goal_clock) begin

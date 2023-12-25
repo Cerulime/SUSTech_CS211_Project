@@ -1,7 +1,7 @@
 `include "Constants.vh"
 module Controller (
     input clk, rst_n,
-    input submit, cancle, 
+    input submit, cancel, 
     input oct_up, oct_down,
     input [`NOTE_KEY_BITS-1:0] note_key,
     input [`LENGTH_KEY_BITS-1:0] length_key,
@@ -10,8 +10,8 @@ module Controller (
     output reg [`TUBE_BITS-1:0] tube1,
     output reg [`TUBE_BITS-1:0] tube2,
     output reg [`TUBE_BITS-1:0] seg_en,
-    output [`NOTE_KEY_BITS-1:0] led,
-    output [`NOTE_KEY_BITS-1:0] led_aux,
+    output reg [`NOTE_KEY_BITS-1:0] led,
+    output reg [`NOTE_KEY_BITS-1:0] led_aux,
     output T1
 );
     assign T1 = 0;
@@ -35,10 +35,11 @@ reg [`CLOCK_BITS-1:0] system_clock;
 wire en_set;
     Pulse pht(clk, rst_n, submit, en_set);
 wire en_back;
-    Pulse phk(clk, rst_n, cancle, en_back);
+    Pulse phk(clk, rst_n, cancel, en_back);
 
 wire buzzer_sd;
 reg en_sd, over;
+reg [`NOTE_BITS-1:0] cnt;
     Sound sd(clk, en_sd, 3'b100, cnt, 3'b000, 3'b100, buzzer_sd, over);
 
 reg [`STATE_BITS-1:0] state;
@@ -49,6 +50,7 @@ wire [`TUBE_BITS-1:0] mn_seg_en, mn_tube1, mn_tube2;
 wire Auto_buzzer, Free_buzzer, Play_buzzer, Stdy_buzzer;
 wire [`NOTE_KEY_BITS-1:0] Auto_led, Free_led, Play_led, Stdy_led;
 reg en_Auto, en_Free, en_Play, en_Stdy, en_Set;
+wire [`NOTE_KEY_BITS-1:0] trans_note;
     Automode automode(clk, en_Auto, song, Auto_led, Auto_buzzer);
     Freemode freemode(clk, en_Free, rst_n, submit, oct_up, oct_down, trans_note, length_key, system_clock,
                       Free_led, Free_buzzer);
@@ -192,12 +194,10 @@ reg rw;
 wire [`NOTE_KEY_BITS-1:0] addr;
     assign addr = note_key;
 reg [`NOTE_KEY_BITS-1:0] in;
-wire [`NOTE_KEY_BITS-1:0] trans_note;
 reg ram_rst;
     RAM ram(ram_rst, rw, addr, in, trans_note);
 
 reg setted;
-reg [`NOTE_BITS-1:0] cnt;
     always @(*) begin
         if (cnt == `NOTE_KEY_BITS) begin
             state = `menu_mode;

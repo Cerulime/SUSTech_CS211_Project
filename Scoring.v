@@ -20,7 +20,7 @@ module Scoring(
     output reg [20:0] acc,
     output reg [2:0] level
 );
-wire [6:0] mod_mutiplier, mod_divider;
+reg [6:0] mod_mutiplier, mod_divider;
     always @(mod) begin
         case (mod)
             2'b00: begin // Normal

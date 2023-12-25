@@ -26,9 +26,9 @@ module Song(
 
     always @(song) begin
         case(song)
-            `little_star: track <= 42;
-            `two_tigers: track <= 32;
-            `happy_birthday: track <= 25;
+            `little_star: track <= 43;
+            `two_tigers: track <= 33;
+            `happy_birthday: track <= 26;
             default: track <= 0;
         endcase
     end

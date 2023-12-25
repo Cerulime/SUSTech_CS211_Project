@@ -53,10 +53,7 @@ wire [`CLOCK_BITS-1:0] system_clk;
 
 wire en_set;
     Pulse pht(clk, rst_n, submit, en_set);
-reg cache_set;
-    always @(*) begin
-        cache_set = en_set;
-    end
+reg last_en_set, cache_set;
 wire en_back;
     Pulse phk(clk, rst_n, cancel, en_back);
 
@@ -67,8 +64,9 @@ reg [`NOTE_BITS-1:0] cnt;
 
 reg [`STATE_BITS-1:0] state;
 reg [`SONG_BITS-1:0] song;
+reg [`SONG_BITS-1:0] menu_song;
 wire [`TUBE_BITS-1:0] mn_seg_en, mn_tube1, mn_tube2;
-    Menu menu(clk, rst_n, state, song, mn_seg_en, mn_tube1, mn_tube2);
+    Menu menu(clk, rst_n, state, menu_song, mn_seg_en, mn_tube1, mn_tube2);
 
 wire Auto_buzzer, Free_buzzer, Play_buzzer, Stdy_buzzer;
 wire [`NOTE_KEY_BITS-1:0] Auto_led, Free_led, Play_led, Play_led_aux, Stdy_led, Stdy_led_aux;
@@ -105,6 +103,12 @@ reg setted;
             en_Play <= 0;
             en_Stdy <= 0;
         end else begin
+            last_en_set <= en_set;
+            if (last_en_set ^ en_set) begin
+                cache_set <= en_set;
+            end else begin
+                cache_set <= 0;
+            end
             if (en_back && state > 0) begin
                 state <= `menu_mode;
                 en_Auto <= 0;
@@ -114,6 +118,7 @@ reg setted;
             end else begin
                 case(state)
                     `menu_mode: begin
+                        ram_rst <= rst_n;
                         if (cache_set) begin
                             case(note_key)
                                 7'b0000001: begin state <= `free_mode; en_Free <= 1; end
@@ -131,6 +136,9 @@ reg setted;
                             endcase
                             cache_set <= 0;
                         end
+                        led <= 7'b0;
+                        led_aux <= 7'b0;
+                        buzzer <= 0;
                         seg_en <= mn_seg_en;
                         tube1 <= mn_tube1;
                         tube2 <= mn_tube2;
@@ -152,8 +160,16 @@ reg setted;
                                     default: song <= `no_song;
                                 endcase
                                 cache_set <= 0;
+                            end else begin
+                                case(note_key)
+                                    7'b0000001: menu_song <= `little_star;
+                                    7'b0000010: menu_song <= `two_tigers;
+                                    7'b0000100: menu_song <= `happy_birthday;
+                                    default: menu_song <= `no_song;
+                                endcase
                             end
                         end else begin
+                            menu_song <= song;
                             en_Auto <= 1;
                             led <= Auto_led;
                             buzzer <= Auto_buzzer;
@@ -172,8 +188,16 @@ reg setted;
                                     default: song <= `no_song;
                                 endcase
                                 cache_set <= 0;
+                            end else begin
+                                case(note_key)
+                                    7'b0000001: menu_song <= `little_star;
+                                    7'b0000010: menu_song <= `two_tigers;
+                                    7'b0000100: menu_song <= `happy_birthday;
+                                    default: menu_song <= `no_song;
+                                endcase
                             end
                         end else begin
+                            menu_song <= song;
                             en_Stdy <= 1;
                             led <= Stdy_led;
                             led_aux <= Stdy_led_aux;
@@ -239,7 +263,7 @@ reg setted;
                                 ram_rst <= rst_n;
                             end
                             en_sd <= cache_set | ~over;
-                            if (cache_set & over) begin
+                            if (cache_set & over & !reset) begin
                                 if (!setted && cnt < `NOTE_KEY_BITS) begin
                                     rw <= 1;
                                     in <= (7'b1 << cnt);

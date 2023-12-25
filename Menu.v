@@ -120,6 +120,11 @@ module Menu(
                             8'h80:tube2 = `two;
                             default:tube2 = `emp;
                         endcase
+                    `happy_birthday:
+                        case(seg_en)
+                            8'h80:tube2 = `three;
+                            default:tube2 = `emp;
+                        endcase
                     default:tube2 = `emp;
                 endcase
             end
@@ -142,6 +147,11 @@ module Menu(
                             8'h80:tube2 = `two;
                             default:tube2 = `emp;
                         endcase
+                    `happy_birthday:
+                        case(seg_en)
+                            8'h80:tube2 = `three;
+                            default:tube2 = `emp;
+                        endcase
                     default:tube2 = `emp;
                 endcase
             end
@@ -162,6 +172,11 @@ module Menu(
                     `two_tigers:
                         case(seg_en)
                             8'h80:tube2 = `two;
+                            default:tube2 = `emp;
+                        endcase
+                    `happy_birthday:
+                        case(seg_en)
+                            8'h80:tube2 = `three;
                             default:tube2 = `emp;
                         endcase
                     default:tube2 = `emp;

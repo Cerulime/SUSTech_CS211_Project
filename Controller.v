@@ -1,7 +1,7 @@
 `include "Constants.vh"
 module Controller (
     input clk, rst_n,
-    input submit, cancle, 
+    input submit, cancel, 
     input oct_up, oct_down,
     input [`NOTE_KEY_BITS-1:0] note_key,
     input [`LENGTH_KEY_BITS-1:0] length_key,
@@ -10,8 +10,8 @@ module Controller (
     output reg [`TUBE_BITS-1:0] tube1,
     output reg [`TUBE_BITS-1:0] tube2,
     output reg [`TUBE_BITS-1:0] seg_en,
-    output [`NOTE_KEY_BITS-1:0] led,
-    output [`NOTE_KEY_BITS-1:0] led_aux,
+    output reg [`NOTE_KEY_BITS-1:0] led,
+    output reg [`NOTE_KEY_BITS-1:0] led_aux,
     output T1
 );
     assign T1 = 0;
@@ -35,10 +35,11 @@ reg [`CLOCK_BITS-1:0] system_clock;
 wire en_set;
     Pulse pht(clk, rst_n, submit, en_set);
 wire en_back;
-    Pulse phk(clk, rst_n, cancle, en_back);
+    Pulse phk(clk, rst_n, cancel, en_back);
 
 wire buzzer_sd;
 reg en_sd, over;
+reg [`NOTE_BITS-1:0] cnt;
     Sound sd(clk, en_sd, 3'b100, cnt, 3'b000, 3'b100, buzzer_sd, over);
 
 reg [`STATE_BITS-1:0] state;
@@ -50,7 +51,7 @@ wire Auto_buzzer, Free_buzzer, Play_buzzer, Stdy_buzzer;
 wire [`NOTE_KEY_BITS-1:0] Auto_led, Free_led, Play_led, Stdy_led;
 reg en_Auto, en_Free, en_Play, en_Stdy, en_Set;
     Automode automode(clk, en_Auto, song, Auto_led, Auto_buzzer);
-    Freemode freemode(clk, en_Free, rst_n, submit, oct_up, oct_down, trans_note, length_key, system_clock,
+    Freemode freemode(clk, en_Free, rst_n, submit, oct_up, oct_down, note_key, length_key, system_clock,
                       Free_led, Free_buzzer);
 reg [1:0] mod;
 reg [3:0] difficutly;
@@ -60,9 +61,9 @@ wire pulse_up, pulse_down;
 reg pulse_ack;
 reg [`USER_BITS-1:0] user;
 wire [`TUBE_BITS-1:0] pl_seg_en, pl_tube1, pl_tube2;
-    Playmode playmode(clk, en_Play, rst_n, submit, oct_up, oct_down, trans_note, length_key, system_clock,
+    Playmode playmode(clk, en_Play, rst_n, submit, oct_up, oct_down, note_key, length_key, system_clock,
                       song, user, mod, difficutly, Play_led, led_aux, Play_buzzer, pl_seg_en, pl_tube1, pl_tube2);
-    Stdymode stdymode(clk, en_Stdy, rst_n, submit, oct_up, oct_down, trans_note, length_key, system_clock,
+    Stdymode stdymode(clk, en_Stdy, rst_n, submit, oct_up, oct_down, note_key, length_key, system_clock,
                       song, reset, is_rw, Stdy_led, Stdy_buzzer);
 
     always @(posedge clk, negedge rst_n) begin
@@ -115,6 +116,7 @@ wire [`TUBE_BITS-1:0] pl_seg_en, pl_tube1, pl_tube2;
                                 case(note_key)
                                     7'b0000001: song <= `little_star;
                                     7'b0000010: song <= `two_tigers;
+                                    7'b0000100: song <= `happy_birthday;
                                     default: song <= `no_song;
                                 endcase
                             end
@@ -133,6 +135,7 @@ wire [`TUBE_BITS-1:0] pl_seg_en, pl_tube1, pl_tube2;
                                 case(note_key)
                                     7'b0000001: song <= `little_star;
                                     7'b0000010: song <= `two_tigers;
+                                    7'b0000100: song <= `happy_birthday;
                                     default: song <= `no_song;
                                 endcase
                             end
@@ -162,6 +165,7 @@ wire [`TUBE_BITS-1:0] pl_seg_en, pl_tube1, pl_tube2;
                                 case(note_key)
                                     7'b0000001: song <= `little_star;
                                     7'b0000010: song <= `two_tigers;
+                                    7'b0000100: song <= `happy_birthday;
                                     7'b1000000: user <= 1;
                                     7'b0100000: user <= 2;
                                     default: song <= `no_song;
@@ -197,7 +201,6 @@ reg ram_rst;
     RAM ram(ram_rst, rw, addr, in, trans_note);
 
 reg setted;
-reg [`NOTE_BITS-1:0] cnt;
     always @(*) begin
         if (cnt == `NOTE_KEY_BITS) begin
             state = `menu_mode;

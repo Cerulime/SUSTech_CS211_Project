@@ -22,17 +22,19 @@
 `define play_mode 4
 `define set 5
 
-`deinfe no_song 0
+`define no_song 0
 `define little_star 1
 `define two_tigers 2
+`define happy_birthday 3
 
-`define do 0
-`define re 1
-`define mi 2
-`define fa 3
-`define so 4
-`define la 5
-`define xi 6
+`define do 3'd0
+`define re 3'd1
+`define mi 3'd2
+`define fa 3'd3
+`define so 3'd4
+`define la 3'd5
+`define xi 3'd6
+`define null 3'd7
 
 `define full_note 0
 `define half_note 1

@@ -24,6 +24,7 @@ reg [`CLOCK_BITS-1:0] now_clock;
             7'b0010000: now_note = 4;
             7'b0100000: now_note = 5;
             7'b1000000: now_note = 6;
+            7'b0000000: now_note = 7;
             default: now_note = now_note;
         endcase
         case (length_key)
@@ -53,7 +54,7 @@ reg pulse_ack;
                 endcase
                 pulse_ack <= pulse_up | pulse_down;
             end else begin
-                pulse_ack <= pulse_up | pulse_down
+                pulse_ack <= pulse_up | pulse_down;
             end
         end else begin
             now_clock <= 0;

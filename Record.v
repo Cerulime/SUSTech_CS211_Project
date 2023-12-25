@@ -1,6 +1,6 @@
 `include "Constants.vh"
 module Record(
-    input rw, en,
+    input rst_n, rw, en,
     input [`REC_CNT_BITS-1:0] cnt,
     input [`OCTAVE_BITS-1:0] octave,
     input [`NOTE_BITS-1:0] note,
@@ -15,8 +15,16 @@ reg [`OCTAVE_BITS-1:0] rec_oct[(1<<`REC_CNT_BITS)-1:0];
 reg [`NOTE_BITS-1:0] rec_note[(1<<`REC_CNT_BITS)-1:0];
 reg [`LENGTH_BITS-1:0] rec_length[(1<<`REC_CNT_BITS)-1:0];
 reg [`FULL_NOTE_BITS-1:0] rec_full_note[(1<<`REC_CNT_BITS)-1:0];
-    always @(en) begin
-        if (en) begin
+integer i;
+    always @(*) begin
+        if (~rst_n) begin
+            for (i = 0; i < (1<<`REC_CNT_BITS); i = i + 1) begin
+                rec_oct[i] = 3'b100;
+                rec_note[i] = 3'b000;
+                rec_length[i] = 3'b000;
+                rec_full_note[i] = 3'b100;
+            end
+        end else if (en) begin
             if (rw) begin
                 rec_oct[cnt] = octave;
                 rec_note[cnt] = note;

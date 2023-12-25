@@ -6,10 +6,10 @@ module Record(
     input [`NOTE_BITS-1:0] note,
     input [`LENGTH_BITS-1:0] length,
     input [`FULL_NOTE_BITS-1:0] full_note,
-    output reg [`OCTAVE_BITS-1:0] octave_r,
-    output reg [`NOTE_BITS-1:0] note_r,
-    output reg [`LENGTH_BITS-1:0] length_r,
-    output reg [`FULL_NOTE_BITS-1:0] full_note_r
+    output [`OCTAVE_BITS-1:0] octave_r,
+    output [`NOTE_BITS-1:0] note_r,
+    output [`LENGTH_BITS-1:0] length_r,
+    output [`FULL_NOTE_BITS-1:0] full_note_r
 );
 reg [`OCTAVE_BITS-1:0] rec_oct[(1<<`REC_CNT_BITS)-1:0];
 reg [`NOTE_BITS-1:0] rec_note[(1<<`REC_CNT_BITS)-1:0];
@@ -22,17 +22,11 @@ reg [`FULL_NOTE_BITS-1:0] rec_full_note[(1<<`REC_CNT_BITS)-1:0];
                 rec_note[cnt] = note;
                 rec_length[cnt] = length;
                 rec_full_note[cnt] = full_note;
-            end else begin
-                octave_r = rec_oct[cnt];
-                note_r = rec_note[cnt];
-                length_r = rec_length[cnt];
-                full_note_r = rec_full_note[cnt];
             end
-        end else begin
-            octave_r = 0;
-            note_r = 0;
-            length_r = 0;
-            full_note_r = 0;
         end
     end
+    assign octave_r = rec_oct[cnt];
+    assign note_r = rec_note[cnt];
+    assign length_r = rec_length[cnt];
+    assign full_note_r = rec_full_note[cnt];
 endmodule

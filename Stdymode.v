@@ -27,9 +27,12 @@ reg [`OCTAVE_BITS-1:0] octave_in;
 wire en_sd_out;
 reg en_sd;
     Pulse psd(clk, rst_n, en_hit, en_sd_out);
+reg [`OCTAVE_BITS-1:0] octave_sd;
+reg [`NOTE_BITS-1:0] note_sd;
+reg [`LENGTH_BITS-1:0] length_sd;
 wire [`FULL_NOTE_BITS-1:0] full_note;
 wire over;
-    Sound sd(clk, en_sd, octave, note, length, full_note, buzzer, over);
+    Sound sd(clk, en_sd, octave_sd, note_sd, length_sd, full_note, buzzer, over);
     always @(*) begin
         en_sd = en_sd_out | ~over;
     end
@@ -50,12 +53,16 @@ wire [`FULL_NOTE_BITS-1:0] rec_full_note;
               rec_octave, rec_note, rec_length, rec_full_note);
     Light nlt(en_sd, goal_note, note_led);
 reg can_add;
+reg is_sound;
     always @(posedge clk) begin
         if (en) begin
             if (!is_record) begin
                 en_rec <= 0;
                 rec_cnt <= 0;
-                if (over) begin
+                octave_sd <= octave;
+                note_sd <= note;
+                length_sd <= length;
+                if (over & is_sound) begin
                     if (cnt < track) begin
                         cnt <= cnt + 1;
                         song_input <= song;
@@ -63,8 +70,16 @@ reg can_add;
                         cnt <= 0;
                         song_input <= 0;
                     end
+                    is_sound <= 0;
+                end else if (!over) begin
+                    cnt <= cnt;
+                    song_input <= song;
+                    is_sound <= 1;
                 end
             end else begin
+                octave_sd <= rec_octave;
+                note_sd <= rec_note;
+                length_sd <= rec_length;
                 if (is_rw) begin
                     if (en_sd) begin
                         en_rec <= 1;
@@ -100,6 +115,7 @@ reg can_add;
             song_input <= song;
             en_rec <= 0;
             rec_cnt <= 0;
+            is_sound <= 1;
         end
     end
 endmodule

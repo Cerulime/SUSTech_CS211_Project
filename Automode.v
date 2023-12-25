@@ -18,7 +18,7 @@ wire [`SONG_CNT_BITS-1:0] track;
     Light lt(en, note, led);
     always @(posedge clk) begin
         if (en) begin
-            if (song != `no_song) begin
+            if (song_input != `no_song) begin
                 if (over) begin
                     if (cnt < track) begin
                         cnt <= cnt + 1;

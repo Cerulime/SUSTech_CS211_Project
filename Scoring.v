@@ -1,3 +1,27 @@
+/**
+ * Scoring module calculates the score, bonus, combo, accuracy, and level based on the input parameters.
+ *
+ * @module Scoring
+ * @param clock The clock signal.
+ * @param octave The current octave.
+ * @param note The current note.
+ * @param length The length of the current note.
+ * @param goal_clock The goal clock signal.
+ * @param goal_octave The goal octave.
+ * @param goal_note The goal note.
+ * @param goal_length The length of the goal note.
+ * @param last_combo The previous combo value.
+ * @param now_cnt The current count.
+ * @param total_note The total number of notes.
+ * @param mod The game mode.
+ * @param difficulty The game difficulty.
+ * @param last_base_score The previous base score.
+ * @param base_score The calculated base score.
+ * @param bonus_score The calculated bonus score.
+ * @param combo The current combo.
+ * @param acc The accuracy.
+ * @param level The game level.
+ */
 `include "Constants.vh"
 module Scoring(
     input [`CLOCK_BITS-1:0] clock,

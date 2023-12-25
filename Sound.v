@@ -1,3 +1,12 @@
+/**
+ * @module Sound
+ * @brief This module generates a sound signal based on the input parameters.
+ *
+ * The Sound module takes in various input signals such as clk, en, octave, note, length, and full_note,
+ * and generates a sound signal on the buzzer output. The sound signal is generated using a PWM technique
+ * based on the octave and note values. The length of the sound signal is controlled by the length and full_note
+ * parameters. The module also includes internal registers and counters to control the timing and duration of the sound signal.
+ */
 `include "Constants.vh"
 module Sound(
     input clk, en,

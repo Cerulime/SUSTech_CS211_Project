@@ -1,4 +1,13 @@
 `include "Constants.vh"
+
+/**
+ * @module Light
+ * @brief Controls the LED based on the input note and enable signal.
+ *
+ * @param en    : input wire, enable signal
+ * @param note  : input wire, note value
+ * @param led   : output reg, LED control signal
+ */
 module Light(
     input en,
     input [`NOTE_BITS-1:0] note,

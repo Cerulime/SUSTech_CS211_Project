@@ -1,3 +1,22 @@
+/**
+ * Automode module
+ *
+ * This module implements an automatic mode for playing songs on a device. It takes inputs for clock signal, enable signal, song selection, and outputs LED display and buzzer control signals.
+ *
+ * Inputs:
+ * - clk: Clock signal
+ * - en: Enable signal
+ * - song: Song selection
+ *
+ * Outputs:
+ * - led: LED display control signal
+ * - buzzer: Buzzer control signal
+ *
+ * Modules used:
+ * - Sound: Generates sound signals based on inputs
+ * - Song: Manages song playback and timing
+ * - Light: Controls LED display based on note inputs
+ */
 `include "Constants.vh"
 module Automode (
     input clk, en,

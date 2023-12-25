@@ -1,3 +1,28 @@
+/**
+ * @module Stdymode
+ * @brief This module represents the main control logic for the steady mode operation.
+ *
+ * The Stdymode module takes various inputs such as clock, enable, reset, hit signals, octave and note keys,
+ * length key, system clock, song selection, record and read/write flags, and generates the necessary control
+ * signals for the operation of the system. It also interfaces with other modules such as Hit, Pulse, Sound,
+ * Song, Record, and Light to perform specific tasks related to sound generation, song playback, recording,
+ * and LED display.
+ *
+ * @param clk The clock signal.
+ * @param en The enable signal.
+ * @param rst_n The active low reset signal.
+ * @param en_hit The enable signal for hit detection.
+ * @param oct_up The octave up signal.
+ * @param oct_down The octave down signal.
+ * @param note_key The input for note keys.
+ * @param length_key The input for length keys.
+ * @param system_clock The input for the system clock.
+ * @param song The input for song selection.
+ * @param is_record The record flag.
+ * @param is_rw The read/write flag.
+ * @param note_led The output for note LED display.
+ * @param buzzer The output for the buzzer signal.
+ */
 `include "Constants.vh"
 module Stdymode(
     input clk, en, rst_n,

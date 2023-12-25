@@ -1,3 +1,28 @@
+/**
+ * @module Menu
+ * @brief Implements a menu module for controlling a display with multiple tubes.
+ *
+ * The Menu module receives inputs such as clock, reset, state, and song, and generates outputs
+ * to control the display tubes. It uses a scan counter to cycle through the tubes and a state machine
+ * to determine which segments to light up on each tube based on the current state and song.
+ *
+ * Inputs:
+ *   - clk: Clock signal
+ *   - rst_n: Active-low reset signal
+ *   - state: Current state of the menu
+ *   - song: Current song being played
+ *
+ * Outputs:
+ *   - seg_en: Segment enable signals for each tube
+ *   - tube1: Data signals for tube 1
+ *   - tube2: Data signals for tube 2
+ *
+ * Parameters:
+ *   - period: Clock period for generating the clock output signal
+ *
+ * The module uses internal registers to keep track of the clock count, scan count, and the state of the display tubes.
+ * It uses case statements to determine which segments to light up based on the current state and song.
+ */
 `include "Constants.vh"
 module Menu(
     input clk, rst_n,

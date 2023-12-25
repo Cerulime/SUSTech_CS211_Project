@@ -1,3 +1,12 @@
+/**
+ * @module Controller
+ * @brief This module represents the controller for a digital piano.
+ *
+ * The Controller module handles various modes of operation, including menu mode, free mode, auto mode, study mode, and play mode.
+ * It receives input signals such as clock, reset, submit, cancel, octave up, octave down, note key, length key, reset, and is_rw.
+ * It generates output signals such as buzzer, tube1, tube2, seg_en, led, led_aux, and T1.
+ * The module also instantiates other modules such as Pulse, Sound, Menu, Automode, Freemode, Playmode, and Stdymode to perform specific tasks.
+ */
 `include "Constants.vh"
 module Controller (
     input clk, rst_n,

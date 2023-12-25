@@ -1,3 +1,12 @@
+/**
+ * @module Hit
+ * @brief This module represents a hit in a musical instrument.
+ *
+ * The Hit module receives various inputs such as clock, enable, reset, octave, note key, length key, and system clock.
+ * It generates outputs for octave, note, length, and clock.
+ * The module includes logic to handle note and length key inputs, as well as pulse signals for octave increment and decrement.
+ * The module also includes a pulse acknowledgement mechanism and a clock generation mechanism.
+ */
 `include "Constants.vh"
 module Hit(
     input clk, en, rst_n,

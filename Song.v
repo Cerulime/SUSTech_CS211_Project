@@ -1,3 +1,18 @@
+/**
+ * @module Song
+ * @brief Module for playing different songs
+ *
+ * This module takes a song input and generates the corresponding musical notes and lengths
+ * for the output. It supports multiple songs including "Little Star" and "Two Tigers".
+ *
+ * @param song Input signal representing the selected song
+ * @param cnt Input signal representing the count of the current note in the song
+ * @param track Output signal representing the track number of the selected song
+ * @param octave Output signal representing the octave of the current note
+ * @param note Output signal representing the musical note of the current note
+ * @param length Output signal representing the length of the current note
+ * @param full_note Output signal representing the full note value of the selected song
+ */
 `include "Constants.vh"
 module Song(
     input [`SONG_BITS-1:0] song,

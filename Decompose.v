@@ -1,3 +1,20 @@
+/**
+ * Decompose module takes a 21-bit input number 'x' and decomposes it into individual digits.
+ * The decomposed digits are stored in the output registers l0, l1, l2, l3, l4, l5, l6, and l7.
+ * The input number 'x' is divided by powers of 10 to extract each digit, which are then assigned to the corresponding output registers.
+ * The output registers are assigned values based on the extracted digits using a case statement.
+ * If the extracted digit is 0, the corresponding output register is assigned the value of `zero.
+ * If the extracted digit is 1, the corresponding output register is assigned the value of `one.
+ * If the extracted digit is 2, the corresponding output register is assigned the value of `two.
+ * If the extracted digit is 3, the corresponding output register is assigned the value of `three.
+ * If the extracted digit is 4, the corresponding output register is assigned the value of `four.
+ * If the extracted digit is 5, the corresponding output register is assigned the value of `five.
+ * If the extracted digit is 6, the corresponding output register is assigned the value of `six.
+ * If the extracted digit is 7, the corresponding output register is assigned the value of `seven.
+ * If the extracted digit is 8, the corresponding output register is assigned the value of `eight.
+ * If the extracted digit is 9, the corresponding output register is assigned the value of `nine.
+ * If the extracted digit is not in the range of 0 to 9, the corresponding output register is assigned the value of `emp.
+ */
 `include "Constants.vh"
 module Decompose(
     input [20:0] x,

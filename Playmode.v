@@ -1,3 +1,31 @@
+/**
+ * @module Playmode
+ * @brief This module represents the play mode of a game.
+ *
+ * The Playmode module controls the gameplay logic, including handling user input,
+ * generating sound, scoring, and displaying LED indicators. It interacts with other
+ * modules such as Pulse, Hit, Sound, Song, Scoring, Light, Scoreboard, and Max.
+ *
+ * @param clk The clock input
+ * @param en The enable input
+ * @param rst_n The active-low reset input
+ * @param en_hit The enable hit input
+ * @param oct_up The octave up input
+ * @param oct_down The octave down input
+ * @param note_key The note key input
+ * @param length_key The length key input
+ * @param system_clock The system clock input
+ * @param song The song input
+ * @param user The user input
+ * @param mod The mod input
+ * @param difficulty The difficulty input
+ * @param note_led The note LED output
+ * @param level_led The level LED output
+ * @param buzzer The buzzer output
+ * @param seg_en The segment enable output
+ * @param tube1 The tube 1 output
+ * @param tube2 The tube 2 output
+ */
 `include "Constants.vh"
 module Playmode(
     input clk, en, rst_n,

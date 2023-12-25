@@ -1,3 +1,23 @@
+/**
+ * @module Record
+ * @brief This module represents a record that stores information about an audio note.
+ *
+ * The Record module stores the octave, note, length, and full note information for each audio note.
+ * It provides read and write functionality to access and modify the stored information.
+ *
+ * @param rst_n     : Reset signal (active low)
+ * @param rw        : Read/Write control signal
+ * @param en        : Enable signal
+ * @param cnt       : Index of the record to access
+ * @param octave    : Octave value to write
+ * @param note      : Note value to write
+ * @param length    : Length value to write
+ * @param full_note : Full note value to write
+ * @param octave_r  : Octave value read from the record
+ * @param note_r    : Note value read from the record
+ * @param length_r  : Length value read from the record
+ * @param full_note_r : Full note value read from the record
+ */
 `include "Constants.vh"
 module Record(
     input rst_n, rw, en,

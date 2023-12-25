@@ -1,3 +1,24 @@
+/**
+ * @module Scoreboard
+ * @brief Implements a scoreboard module for displaying various game statistics.
+ *
+ * This module takes input signals such as combo, mod, difficulty, base_score, bonus_score, acc, and level,
+ * and displays them on two 7-segment display tubes (tube1 and tube2) using a multiplexing technique.
+ * The module also includes a clock input (clk) and an enable signal (en) to control the operation of the scoreboard.
+ *
+ * @param clk The clock input signal.
+ * @param en The enable signal to control the operation of the scoreboard.
+ * @param combo The input signal representing the combo value.
+ * @param mod The input signal representing the mod value.
+ * @param difficulty The input signal representing the difficulty level.
+ * @param base_score The input signal representing the base score.
+ * @param bonus_score The input signal representing the bonus score.
+ * @param acc The input signal representing the accuracy.
+ * @param level The input signal representing the game level.
+ * @param seg_en The output signal for controlling the 7-segment display enable pins.
+ * @param tube1 The output signal for displaying the digits on the first 7-segment display tube.
+ * @param tube2 The output signal for displaying the digits on the second 7-segment display tube.
+ */
 `include "Constants.vh"
 module Scoreboard(
     input clk, en,

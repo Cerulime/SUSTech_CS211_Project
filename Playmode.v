@@ -58,7 +58,8 @@ wire [`OCTAVE_BITS-1:0] octave;
 wire [`NOTE_BITS-1:0] note;
 wire [`LENGTH_BITS-1:0] length;
 reg [`OCTAVE_BITS-1:0] octave_in;
-    Hit ht(clk, en, rst_n, octave_in, oct_up, oct_down, note_key, length_key, system_clock, 
+wire over;
+    Hit ht(clk, ~over, rst_n, octave_in, oct_up, oct_down, note_key, length_key, system_clock, 
            clock, octave, note, length);
     always @(*) begin
         if (en) begin
@@ -70,7 +71,7 @@ reg [`OCTAVE_BITS-1:0] octave_in;
 wire [`FULL_NOTE_BITS-1:0] full_note;
 reg [`FULL_NOTE_BITS-1:0] full_note_mod;
     always @(*) begin
-        case (full_note)
+        case (mod)
             2'b10: full_note_mod = full_note * 2; // Half Time
             2'b11: full_note_mod = full_note / 2; // Double Time
             default: full_note_mod = full_note;
@@ -79,8 +80,8 @@ reg [`FULL_NOTE_BITS-1:0] full_note_mod;
 wire [`OCTAVE_BITS-1:0] goal_octave;
 wire [`NOTE_BITS-1:0] goal_note;
 wire [`LENGTH_BITS-1:0] goal_length;
-wire over;
-    Sound sd(clk, en, goal_octave, goal_note, goal_length, full_note_mod, buzzer, over);
+wire buzzer_sd;
+    Sound sd(clk, en, goal_octave, goal_note, goal_length, full_note_mod, buzzer_sd, over);
 reg [`SONG_BITS-1:0] song_input;
 reg [`SONG_CNT_BITS-1:0] cnt;
 wire [`SONG_CNT_BITS-1:0] track;
@@ -123,28 +124,30 @@ wire [`TUBE_BITS-1:0] usr_seg_en, usr_tube1, usr_tube2;
             seg_en = usr_seg_en;
             tube1 = usr_tube1;
             tube2 = usr_tube2;
+            buzzer = 0;
         end else begin
             seg_en = pl_seg_en;
             tube1 = pl_tube1;
             tube2 = pl_tube2;
+            buzzer = buzzer_sd;
         end
     end
 reg can_add;
     always @(posedge clk) begin
         if (en) begin
-            if (over & can_add) begin
+            if (~over & can_add & note_key != 7) begin
                 base_score <= base_score + base_temp;
                 bonus_score <= bonus_score + bonus_temp;
                 last_combo <= combo;
                 can_add <= 0;
-            end else if (!over) begin
+            end else if (over) begin
                 can_add <= 1;
             end
         end else begin
             base_score <= 0;
             bonus_score <= 0;
             last_combo <= 0;
-            can_add <= 1;
+            can_add <= 0;
         end
     end
 reg [`MAX_NUM-1:0] combo_user [(1<<`USER_BITS)-1:0];
@@ -174,11 +177,13 @@ integer i;
             end
         end else begin
             if (en) begin
-                combo_user[user] <= combo_user_new;
-                acc_user[user] <= acc_user_new;
-                level_user[user] <= level;
-                base_score_user[user] <= base_score_user_new;
-                bonus_score_user[user] <= bonus_score_user_new;
+                if (cnt == track) begin
+                    combo_user[user] <= combo_user_new;
+                    acc_user[user] <= acc_user_new;
+                    level_user[user] <= level;
+                    base_score_user[user] <= base_score_user_new;
+                    bonus_score_user[user] <= bonus_score_user_new;
+                end
             end
         end
     end

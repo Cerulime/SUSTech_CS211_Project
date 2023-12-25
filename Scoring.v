@@ -46,7 +46,7 @@ module Scoring(
     output reg [`MAX_NUM-1:0] acc,
     output reg [2:0] level
 );
-reg [6:0] mod_mutiplier, mod_divider;
+reg [`MAX_NUM-1:0] mod_mutiplier, mod_divider;
     always @(mod) begin
         case (mod)
             2'b00: begin // Normal
@@ -130,7 +130,7 @@ wire [`MAX_NUM-1:0] sqrt_combo;
         if (now_cnt == 0)
             acc = 10000;
         else
-            acc = {5'b0, last_base_score} * 10 / (now_cnt * 3);
+            acc = last_base_score * 10 / (now_cnt * 3);
         if (acc >= 10000 && mod_divider > 100) begin
             level = 0;
         end else if (acc >= 10000) begin

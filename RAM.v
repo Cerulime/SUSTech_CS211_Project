@@ -20,23 +20,28 @@ module RAM(
 );
 reg [`NOTE_KEY_BITS-1:0] mem [`NOTE_KEY_BITS-1:0];
 reg [`NOTE_KEY_BITS-1:0] get;
-integer i;
 
-    /**
-     * RAM behavior
-     *
-     * This always block describes the behavior of the RAM module.
-     * It handles the reset, read, and write operations.
-     */
     always @* begin
         if (!rst_n) begin
-            for (i = 0; i < `NOTE_KEY_BITS; i = i + 1)
-                mem[i] = (7'b1 << i);
+            mem[0] = 7'b0000001;
+            mem[1] = 7'b0000010;
+            mem[2] = 7'b0000100;
+            mem[3] = 7'b0001000;
+            mem[4] = 7'b0010000;
+            mem[5] = 7'b0100000;
+            mem[6] = 7'b1000000;
         end else begin
             if (rw) begin
-                for (i = 0; i < `NOTE_KEY_BITS; i = i + 1)
-                    if (addr & (7'b1 << i))
-                        mem[i] = in;
+                case (addr)
+                    7'b0000001: mem[0] = in;
+                    7'b0000010: mem[1] = in;
+                    7'b0000100: mem[2] = in;
+                    7'b0001000: mem[3] = in;
+                    7'b0010000: mem[4] = in;
+                    7'b0100000: mem[5] = in;
+                    7'b1000000: mem[6] = in;
+                    default: mem[0] = mem[0];
+                endcase
             end
             case (addr)
                 7'b0000001: get = mem[0];

@@ -53,6 +53,7 @@ reg buzz_state;
             end
 
             if(length_counter >= (full_note * 100000000 / pow[length])) begin
+                length_counter <= 0;
                 over <= 1;
             end else begin
                 length_counter <= length_counter + 1;
@@ -66,6 +67,6 @@ reg buzz_state;
         end
     end
 
-    assign buzzer = buzz_state & ~over;
+    assign buzzer = buzz_state & ~over & ~(note==`null);
 
 endmodule

@@ -19,6 +19,7 @@ module RAM(
     output [`NOTE_KEY_BITS-1:0] out
 );
 reg [`NOTE_KEY_BITS-1:0] mem [`NOTE_KEY_BITS-1:0];
+reg [`NOTE_KEY_BITS-1:0] get;
 integer i;
 
     /**
@@ -37,8 +38,18 @@ integer i;
                     if (addr & (7'b1 << i))
                         mem[i] = in;
             end
+            case (addr)
+                7'b0000001: get = mem[0];
+                7'b0000010: get = mem[1];
+                7'b0000100: get = mem[2];
+                7'b0001000: get = mem[3];
+                7'b0010000: get = mem[4];
+                7'b0100000: get = mem[5];
+                7'b1000000: get = mem[6];
+                default: get = 7'b0000000;
+            endcase
         end
     end
 
-    assign out = mem[addr];
+    assign out = get;
 endmodule

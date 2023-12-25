@@ -114,7 +114,7 @@ reg setted;
                                 7'b0000010: begin state <= `auto_mode; en_Auto <= 0; song <= 0; end
                                 7'b0000100: begin state <= `stdy_mode; en_Stdy <= 0; song <= 0; end
                                 7'b0001000: begin state <= `play_mode; en_Play <= 0; song <= 0; difficutly <= 4; pulse_ack <= 0; end
-                                7'b0010000: begin state <= `set;       en_Set  <= 1; end 
+                                7'b0010000: begin state <= `set; cnt <= 3'b000; end 
                                 default: begin
                                     state <= `menu_mode;
                                     en_Auto <= 0;
@@ -124,6 +124,9 @@ reg setted;
                                 end
                             endcase
                         end
+                        seg_en <= mn_seg_en;
+                        tube1 <= mn_tube1;
+                        tube2 <= mn_tube2;
                     end
                     `free_mode: begin
                         led <= Free_led;
@@ -239,6 +242,9 @@ reg setted;
                                 rw <= 0;
                             end
                         end
+                        seg_en <= mn_seg_en;
+                        tube1 <= mn_tube1;
+                        tube2 <= mn_tube2;
                     end
                 endcase
             end

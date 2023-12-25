@@ -21,6 +21,7 @@
  * @param is_record The record flag.
  * @param is_rw The read/write flag.
  * @param note_led The output for note LED display.
+ * @param length_led The output for length LED display.
  * @param buzzer The output for the buzzer signal.
  */
 
@@ -40,6 +41,7 @@ module Stdymode(
     input [`SONG_BITS-1:0] song,
     input is_record, is_rw,
     output [`NOTE_KEY_BITS-1:0] note_led,
+    output [`LENGTH_KEY_BITS-1:0] length_led,
     output buzzer
 );
 wire [`CLOCK_BITS-1:0] clock;
@@ -84,6 +86,7 @@ wire [`FULL_NOTE_BITS-1:0] rec_full_note;
     Record rc(rst_n, is_rw, en_rec, rec_cnt, octave, note, length, full_note, 
               rec_octave, rec_note, rec_length, rec_full_note);
     Light nlt(en, goal_note, note_led);
+    Light llt(en, goal_length, length_led);
 reg can_add;
 reg is_sound;
     always @(posedge clk) begin

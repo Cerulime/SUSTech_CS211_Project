@@ -65,7 +65,7 @@ wire [`TUBE_BITS-1:0] mn_seg_en, mn_tube1, mn_tube2;
     Menu menu(clk, rst_n, state, song, mn_seg_en, mn_tube1, mn_tube2);
 
 wire Auto_buzzer, Free_buzzer, Play_buzzer, Stdy_buzzer;
-wire [`NOTE_KEY_BITS-1:0] Auto_led, Free_led, Play_led, Stdy_led;
+wire [`NOTE_KEY_BITS-1:0] Auto_led, Free_led, Play_led, Play_led_aux, Stdy_led, Stdy_led_aux;
 reg en_Auto, en_Free, en_Play, en_Stdy;
 wire [`NOTE_KEY_BITS-1:0] trans_note;
     Automode automode(clk, en_Auto, song, Auto_led, Auto_buzzer);
@@ -80,9 +80,9 @@ reg pulse_ack;
 reg [`USER_BITS-1:0] user;
 wire [`TUBE_BITS-1:0] pl_seg_en, pl_tube1, pl_tube2;
     Playmode playmode(clk, en_Play, rst_n, submit, oct_up, oct_down, trans_note, length_key, system_clock,
-                      song, user, mod, difficutly, Play_led, led_aux, Play_buzzer, pl_seg_en, pl_tube1, pl_tube2);
+                      song, user, mod, difficutly, Play_led, Play_led_aux, Play_buzzer, pl_seg_en, pl_tube1, pl_tube2);
     Stdymode stdymode(clk, en_Stdy, rst_n, submit, oct_up, oct_down, trans_note, length_key, system_clock,
-                      song, reset, is_rw, Stdy_led, Stdy_buzzer);
+                      song, reset, is_rw, Stdy_led, Stdy_led_aux, Stdy_buzzer);
 reg rw;
 wire [`NOTE_KEY_BITS-1:0] addr;
     assign addr = note_key;
@@ -164,6 +164,7 @@ reg setted;
                         end else begin
                             en_Stdy <= 1;
                             led <= Stdy_led;
+                            led_aux <= Stdy_led_aux;
                             buzzer <= Stdy_buzzer;
                             seg_en <= mn_seg_en;
                             tube1 <= mn_tube1;
@@ -203,6 +204,7 @@ reg setted;
                         end else begin
                             en_Play <= 1;
                             led <= Play_led;
+                            led_aux <= Play_led_aux;
                             buzzer <= Play_buzzer;
                             seg_en <= pl_seg_en;
                             tube1 <= pl_tube1;

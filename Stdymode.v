@@ -136,12 +136,16 @@ reg is_sound;
                     end
                 end else begin
                     en_rec <= 1;
-                    if (over) begin
+                    if (over & is_sound) begin
                         if (rec_cnt < (1<<`REC_CNT_BITS)-1) begin
                             rec_cnt <= rec_cnt + 1;
                         end else begin
                             rec_cnt <= 0;
                         end
+                        is_sound <= 0;
+                    end else if (!over) begin
+                        rec_cnt <= rec_cnt;
+                        is_sound <= 1;
                     end
                 end
             end

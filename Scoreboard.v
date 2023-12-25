@@ -46,7 +46,7 @@ reg [20:0] cycle_cnt, reflesh_cnt, title_cnt, time_cnt;
                 cycle_cnt <= cycle_cnt + 1;
             end
             if (add_cnt == 1) begin
-                if (time_cnt == 125) begin
+                if (time_cnt == 500) begin
                     add_cnt2 <= 1;
                     time_cnt <= 0;
                 end else begin

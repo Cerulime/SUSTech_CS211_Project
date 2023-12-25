@@ -80,7 +80,8 @@ wire [20:0] sqrt_combo;
         end else begin
             timer = clock - goal_clock;
         end
-        if (octave != goal_octave || note != goal_note || length != goal_length) begin
+        // if (octave != goal_octave || note != goal_note || length != goal_length) begin
+        if (note != goal_note) begin
             hit_score = 0;
             hit_bonus = 0;
             combo = 0;
@@ -114,7 +115,10 @@ wire [20:0] sqrt_combo;
         one_hit_score = 5000 * mod_mutiplier / total_note;
         base_score = one_hit_score * hit_score / 320;
         bonus_score = one_hit_score * hit_bonus * sqrt_combo / 32;
-        acc = {5'b0, last_base_score} * 10 / (now_cnt * 3);
+        if (now_cnt == 0)
+            acc = 10000;
+        else
+            acc = {5'b0, last_base_score} * 10 / (now_cnt * 3);
         if (acc >= 10000 && mod_divider > 100) begin
             level = 0;
         end else if (acc >= 10000) begin

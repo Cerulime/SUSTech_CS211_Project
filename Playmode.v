@@ -81,7 +81,7 @@ reg [`FULL_NOTE_BITS-1:0] full_note_mod;
         endcase
     end
 wire over;
-    Sound sd(clk, en_sd, octave, note, length, full_note_mod, buzzer, over);
+    Sound sd(clk, en, goal_octave, goal_note, goal_length, full_note_mod, buzzer, over);
     always @(*) begin
         en_sd = en_sd_out | ~over;
     end
@@ -92,7 +92,7 @@ wire [`OCTAVE_BITS-1:0] goal_octave;
 wire [`NOTE_BITS-1:0] goal_note;
 wire [`LENGTH_BITS-1:0] goal_length;
     Song sg(song_input, cnt, track, goal_octave, goal_note, goal_length, full_note);
-    Light nlt(en_sd, goal_note, note_led);
+    Light nlt(en, goal_note, note_led);
 reg [`CLOCK_BITS-1:0] goal_clock;
     always @(*) begin
         if (en) begin
@@ -154,7 +154,7 @@ wire [`TUBE_BITS-1:0] usr_seg_en, usr_tube1, usr_tube2;
             base_score = 0;
             bonus_score = 0;
             last_combo = 0;
-            can_hit = 0;
+            can_hit = 1;
         end
     end
 reg [20:0] combo_user [(1<<`USER_BITS)-1:0];

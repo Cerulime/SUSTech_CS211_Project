@@ -35,6 +35,8 @@ module Controller (
 
 reg [20:0] microsecond;
 reg [`CLOCK_BITS-1:0] system_clock;
+wire [`CLOCK_BITS-1:0] system_clk;
+    assign system_clk = system_clock;
     always @(posedge clk) begin
         if (!rst_n) begin
             microsecond <= 0;
@@ -51,11 +53,15 @@ reg [`CLOCK_BITS-1:0] system_clock;
 
 wire en_set;
     Pulse pht(clk, rst_n, submit, en_set);
+reg cache_set;
+    always @(*) begin
+        cache_set = en_set;
+    end
 wire en_back;
     Pulse phk(clk, rst_n, cancel, en_back);
 
-wire buzzer_sd;
-reg en_sd, over;
+wire buzzer_sd, over;
+reg en_sd;
 reg [`NOTE_BITS-1:0] cnt;
     Sound sd(clk, en_sd, 3'b100, cnt, 3'b000, 3'b100, buzzer_sd, over);
 
@@ -69,7 +75,7 @@ wire [`NOTE_KEY_BITS-1:0] Auto_led, Free_led, Play_led, Play_led_aux, Stdy_led, 
 reg en_Auto, en_Free, en_Play, en_Stdy;
 wire [`NOTE_KEY_BITS-1:0] trans_note;
     Automode automode(clk, en_Auto, song, Auto_led, Auto_buzzer);
-    Freemode freemode(clk, en_Free, rst_n, submit, oct_up, oct_down, trans_note, length_key, system_clock,
+    Freemode freemode(clk, en_Free, rst_n, submit, oct_up, oct_down, trans_note, length_key, system_clk,
                       Free_led, Free_buzzer);
 reg [1:0] mod;
 reg [3:0] difficutly;
@@ -79,9 +85,9 @@ wire pulse_up, pulse_down;
 reg pulse_ack;
 reg [`USER_BITS-1:0] user;
 wire [`TUBE_BITS-1:0] pl_seg_en, pl_tube1, pl_tube2;
-    Playmode playmode(clk, en_Play, rst_n, submit, oct_up, oct_down, trans_note, length_key, system_clock,
+    Playmode playmode(clk, en_Play, rst_n, submit, oct_up, oct_down, trans_note, length_key, system_clk,
                       song, user, mod, difficutly, Play_led, Play_led_aux, Play_buzzer, pl_seg_en, pl_tube1, pl_tube2);
-    Stdymode stdymode(clk, en_Stdy, rst_n, submit, oct_up, oct_down, trans_note, length_key, system_clock,
+    Stdymode stdymode(clk, en_Stdy, rst_n, submit, oct_up, oct_down, trans_note, length_key, system_clk,
                       song, reset, is_rw, Stdy_led, Stdy_led_aux, Stdy_buzzer);
 reg rw;
 wire [`NOTE_KEY_BITS-1:0] addr;
@@ -108,7 +114,7 @@ reg setted;
             end else begin
                 case(state)
                     `menu_mode: begin
-                        if (en_set) begin
+                        if (cache_set) begin
                             case(note_key)
                                 7'b0000001: begin state <= `free_mode; en_Free <= 1; end
                                 7'b0000010: begin state <= `auto_mode; en_Auto <= 0; song <= 0; end
@@ -123,6 +129,7 @@ reg setted;
                                     en_Stdy <= 0;
                                 end
                             endcase
+                            cache_set <= 0;
                         end
                         seg_en <= mn_seg_en;
                         tube1 <= mn_tube1;
@@ -137,13 +144,14 @@ reg setted;
                     end
                     `auto_mode: begin
                         if (song == `no_song) begin
-                            if (en_set) begin
+                            if (cache_set) begin
                                 case(note_key)
                                     7'b0000001: song <= `little_star;
                                     7'b0000010: song <= `two_tigers;
                                     7'b0000100: song <= `happy_birthday;
                                     default: song <= `no_song;
                                 endcase
+                                cache_set <= 0;
                             end
                         end else begin
                             en_Auto <= 1;
@@ -156,13 +164,14 @@ reg setted;
                     end
                     `stdy_mode: begin
                         if (song == `no_song && ~reset) begin
-                            if (en_set) begin
+                            if (cache_set) begin
                                 case(note_key)
                                     7'b0000001: song <= `little_star;
                                     7'b0000010: song <= `two_tigers;
                                     7'b0000100: song <= `happy_birthday;
                                     default: song <= `no_song;
                                 endcase
+                                cache_set <= 0;
                             end
                         end else begin
                             en_Stdy <= 1;
@@ -187,7 +196,7 @@ reg setted;
                             end else begin
                                 pulse_ack <= pulse_up | pulse_down;
                             end
-                            if (en_set) begin
+                            if (cache_set) begin
                                 case(note_key)
                                     7'b0000001: song <= `little_star;
                                     7'b0000010: song <= `two_tigers;
@@ -203,6 +212,7 @@ reg setted;
                                     7'b0001000: mod <= 3;
                                     default: mod <= 0;
                                 endcase
+                                cache_set <= 0;
                             end
                         end else begin
                             en_Play <= 1;
@@ -220,20 +230,22 @@ reg setted;
                             cnt <= 0;
                             en_sd <= 0;
                         end else begin
-                            if (reset) begin
+                            if (cache_set & reset) begin
                                 ram_rst <= 0;
                                 state <= `menu_mode;
                                 cnt <= 0;
+                                cache_set <= 0;
                             end else begin
                                 ram_rst <= rst_n;
                             end
-                            en_sd <= en_set | ~over;
-                            if (en_set & over) begin
+                            en_sd <= cache_set | ~over;
+                            if (cache_set & over) begin
                                 if (!setted && cnt < `NOTE_KEY_BITS) begin
                                     rw <= 1;
                                     in <= (7'b1 << cnt);
                                     setted <= 1;
                                     cnt <= cnt + 1;
+                                    cache_set <= 0;
                                 end else begin
                                     rw <= 0;
                                 end

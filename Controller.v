@@ -7,6 +7,14 @@
  * It generates output signals such as buzzer, tube1, tube2, seg_en, led, led_aux, and T1.
  * The module also instantiates other modules such as Pulse, Sound, Menu, Automode, Freemode, Playmode, and Stdymode to perform specific tasks.
  */
+
+`include "Pulse.v"
+`include "Sound.v"
+`include "Menu.v"
+`include "Automode.v"
+`include "Freemode.v"
+`include "Playmode.v"
+`include "Stdymode.v"
 `include "Constants.vh"
 module Controller (
     input clk, rst_n,

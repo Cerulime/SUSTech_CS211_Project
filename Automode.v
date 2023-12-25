@@ -17,6 +17,10 @@
  * - Song: Manages song playback and timing
  * - Light: Controls LED display based on note inputs
  */
+
+`include "Sound.v"
+`include "Song.v"
+`include "Light.v"
 `include "Constants.vh"
 module Automode (
     input clk, en,

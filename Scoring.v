@@ -22,6 +22,8 @@
  * @param acc The accuracy.
  * @param level The game level.
  */
+
+`include "Sqrt.v"
 `include "Constants.vh"
 module Scoring(
     input [`CLOCK_BITS-1:0] clock,

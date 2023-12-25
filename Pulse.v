@@ -10,13 +10,7 @@
  * @param pul The input signal used to generate the pulse signal.
  * @param pulse The output pulse signal.
  */
-module Pulse(
-    input clk, rst_n,
-    input pul,
-    output reg pulse
-);
-...
-endmodule
+
 module Pulse(
     input clk, rst_n,
     input pul,

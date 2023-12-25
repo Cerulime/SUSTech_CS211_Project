@@ -23,6 +23,13 @@
  * @param note_led The output for note LED display.
  * @param buzzer The output for the buzzer signal.
  */
+
+`include "Hit.v"
+`include "Pulse.v"
+`include "Sound.v"
+`include "Song.v"
+`include "Record.v"
+`include "Light.v"
 `include "Constants.vh"
 module Stdymode(
     input clk, en, rst_n,

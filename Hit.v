@@ -7,6 +7,8 @@
  * The module includes logic to handle note and length key inputs, as well as pulse signals for octave increment and decrement.
  * The module also includes a pulse acknowledgement mechanism and a clock generation mechanism.
  */
+
+`include "Pulse.v"
 `include "Constants.vh"
 module Hit(
     input clk, en, rst_n,

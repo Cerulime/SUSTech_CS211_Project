@@ -26,6 +26,15 @@
  * @param tube1 The tube 1 output
  * @param tube2 The tube 2 output
  */
+
+`include "Hit.v"
+`include "Pulse.v"
+`include "Sound.v"
+`include "Song.v"
+`include "Scoring.v"
+`include "Light.v"
+`include "Scoreboard.v"
+`include "Max.v"
 `include "Constants.vh"
 module Playmode(
     input clk, en, rst_n,
@@ -153,11 +162,11 @@ reg [20:0] acc_user [(1<<`USER_BITS)-1:0];
 reg [2:0] level_user [(1<<`USER_BITS)-1:0];
 reg [20:0] base_score_user [(1<<`USER_BITS)-1:0];
 reg [20:0] bonus_score_user [(1<<`USER_BITS)-1:0];
-reg [20:0] combo_user_new;
-reg [20:0] acc_user_new;
-reg [2:0] level_user_new;
-reg [20:0] base_score_user_new;
-reg [20:0] bonus_score_user_new;
+wire [20:0] combo_user_new;
+wire [20:0] acc_user_new;
+wire [2:0] level_user_new;
+wire [20:0] base_score_user_new;
+wire [20:0] bonus_score_user_new;
     Max max_combo(combo_user[user], last_combo, combo_user_new);
     Max max_acc(acc_user[user], acc, acc_user_new);
     Max max_level(level_user[user], level, level_user_new);

@@ -19,6 +19,8 @@
  * @param tube1 The output signal for displaying the digits on the first 7-segment display tube.
  * @param tube2 The output signal for displaying the digits on the second 7-segment display tube.
  */
+
+`include "Decompose.v"
 `include "Constants.vh"
 module Scoreboard(
     input clk, en,
@@ -70,7 +72,7 @@ reg [20:0] cycle_cnt, reflesh_cnt, title_cnt, time_cnt;
             title_cnt <= 0;
         end
     end
-reg [`TUBE_BITS-1:0] t0, t1, t2, t3, t4, t5, t6, t7;
+wire [`TUBE_BITS-1:0] t0, t1, t2, t3, t4, t5, t6, t7;
 reg [20:0] temp;
     Decompose decompose(temp, t0, t1, t2, t3, t4, t5, t6, t7);
     always @(*) begin

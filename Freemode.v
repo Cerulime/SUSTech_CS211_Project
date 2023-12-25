@@ -6,6 +6,10 @@
  * and system clock. It generates sound output through a buzzer and controls LED output based on the note key.
  * The module consists of sub-modules for handling hit detection, pulse generation, sound generation, and LED control.
  */
+
+`include "Hit.v"
+`include "Pulse.v"
+`include "Sound.v"
 `include "Constants.vh"
 module Freemode (
     input clk, en, rst_n,

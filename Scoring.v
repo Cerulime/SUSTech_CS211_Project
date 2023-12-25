@@ -97,15 +97,27 @@ wire [20:0] sqrt_combo;
             end else if (timer < A - difficutly * 3) begin
                 hit_score = 200;
                 hit_bonus = 16;
-                combo = (last_combo - 8) * 100 / mod_divider;
+                if (last_combo < 8) begin
+                    combo = 0;
+                end else begin
+                    combo = (last_combo - 8) * 100 / mod_divider;
+                end
             end else if (timer < B - difficutly * 3) begin
                 hit_score = 100;
                 hit_bonus = 8;
-                combo = (last_combo - 24) * 100 / mod_divider;
+                if (last_combo < 24) begin
+                    combo = 0;
+                end else begin
+                    combo = (last_combo - 24) * 100 / mod_divider;
+                end
             end else if (timer < C - difficutly * 3) begin
                 hit_score = 50;
                 hit_bonus = 4;
-                combo = (last_combo - 44) * 100 / mod_divider;
+                if (last_combo < 44) begin
+                    combo = 0;
+                end else begin
+                    combo = (last_combo - 44) * 100 / mod_divider;
+                end
             end else begin
                 hit_score = 0;
                 hit_bonus = 0;

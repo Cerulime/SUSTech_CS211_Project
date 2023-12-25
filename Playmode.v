@@ -53,14 +53,10 @@ module Playmode(
     output reg [`TUBE_BITS-1:0] tube1,
     output reg [`TUBE_BITS-1:0] tube2
 );
-reg can_hit;
 wire [`CLOCK_BITS-1:0] clock;
 wire [`OCTAVE_BITS-1:0] octave;
 wire [`NOTE_BITS-1:0] note;
 wire [`LENGTH_BITS-1:0] length;
-wire en_sd_out;
-reg en_sd;
-    Pulse pht(clk, rst_n, en_hit & can_hit, en_sd_out);
 reg [`OCTAVE_BITS-1:0] octave_in;
     Hit ht(clk, en, rst_n, octave_in, oct_up, oct_down, note_key, length_key, system_clock, 
            clock, octave, note, length);
@@ -80,36 +76,29 @@ reg [`FULL_NOTE_BITS-1:0] full_note_mod;
             default: full_note_mod = full_note;
         endcase
     end
-wire over;
-    Sound sd(clk, en, goal_octave, goal_note, goal_length, full_note_mod, buzzer, over);
-    always @(*) begin
-        en_sd = en_sd_out | ~over;
-    end
-reg [`SONG_BITS-1:0] song_input;
-reg [`SONG_CNT_BITS-1:0] cnt;
-wire [`SONG_CNT_BITS-1:0] track;
 wire [`OCTAVE_BITS-1:0] goal_octave;
 wire [`NOTE_BITS-1:0] goal_note;
 wire [`LENGTH_BITS-1:0] goal_length;
+wire over;
+    Sound sd(clk, en, goal_octave, goal_note, goal_length, full_note_mod, buzzer, over);
+reg [`SONG_BITS-1:0] song_input;
+reg [`SONG_CNT_BITS-1:0] cnt;
+wire [`SONG_CNT_BITS-1:0] track;
     Song sg(song_input, cnt, track, goal_octave, goal_note, goal_length, full_note);
     Light nlt(en, goal_note, note_led);
 reg [`CLOCK_BITS-1:0] goal_clock;
-    always @(*) begin
+    always @(posedge clk) begin
         if (en) begin
             if (over) begin
                 if (cnt < track) begin
-                    cnt = cnt + 1;
-                    goal_clock = system_clock;
+                    cnt <= cnt + 1;
+                    goal_clock <= system_clock;
                 end
-            end else begin
-                cnt = cnt;
-                song_input = song;
-                goal_clock = goal_clock;
             end
         end else begin
-            cnt = 0;
-            song_input = song;
-            goal_clock = 0;
+            cnt <= 0;
+            song_input <= song;
+            goal_clock <= 0;
         end
     end
 reg [20:0] base_score, bonus_score, last_combo;
@@ -129,7 +118,7 @@ wire [`TUBE_BITS-1:0] usr_seg_en, usr_tube1, usr_tube2;
     Scoreboard high(clk, en, 
                     combo_user[user], mod, difficutly, base_score_user[user], bonus_score_user[user], acc_user[user], level_user[user], 
                     usr_seg_en, usr_tube1, usr_tube2);
-    always @* begin
+    always @(*) begin
         if (cnt == track) begin
             seg_en = usr_seg_en;
             tube1 = usr_tube1;
@@ -140,21 +129,17 @@ wire [`TUBE_BITS-1:0] usr_seg_en, usr_tube1, usr_tube2;
             tube2 = pl_tube2;
         end
     end
-    always @(*) begin
+    always @(posedge clk) begin
         if (en) begin
             if (over) begin
                 base_score = base_score + base_temp;
                 bonus_score = bonus_score + bonus_temp;
                 last_combo = combo;
-                can_hit = 0;
-            end else begin
-                can_hit = 1;
             end
         end else begin
             base_score = 0;
             bonus_score = 0;
             last_combo = 0;
-            can_hit = 1;
         end
     end
 reg [20:0] combo_user [(1<<`USER_BITS)-1:0];

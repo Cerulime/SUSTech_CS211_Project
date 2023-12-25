@@ -83,7 +83,7 @@ wire [`LENGTH_BITS-1:0] rec_length;
 wire [`FULL_NOTE_BITS-1:0] rec_full_note;
     Record rc(rst_n, is_rw, en_rec, rec_cnt, octave, note, length, full_note, 
               rec_octave, rec_note, rec_length, rec_full_note);
-    Light nlt(en_sd, goal_note, note_led);
+    Light nlt(en, goal_note, note_led);
 reg can_add;
 reg is_sound;
     always @(posedge clk) begin

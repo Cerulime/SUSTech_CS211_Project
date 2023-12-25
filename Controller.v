@@ -66,7 +66,7 @@ wire [`TUBE_BITS-1:0] mn_seg_en, mn_tube1, mn_tube2;
 
 wire Auto_buzzer, Free_buzzer, Play_buzzer, Stdy_buzzer;
 wire [`NOTE_KEY_BITS-1:0] Auto_led, Free_led, Play_led, Stdy_led;
-reg en_Auto, en_Free, en_Play, en_Stdy, en_Set;
+reg en_Auto, en_Free, en_Play, en_Stdy;
 wire [`NOTE_KEY_BITS-1:0] trans_note;
     Automode automode(clk, en_Auto, song, Auto_led, Auto_buzzer);
     Freemode freemode(clk, en_Free, rst_n, submit, oct_up, oct_down, trans_note, length_key, system_clock,
@@ -83,6 +83,13 @@ wire [`TUBE_BITS-1:0] pl_seg_en, pl_tube1, pl_tube2;
                       song, user, mod, difficutly, Play_led, led_aux, Play_buzzer, pl_seg_en, pl_tube1, pl_tube2);
     Stdymode stdymode(clk, en_Stdy, rst_n, submit, oct_up, oct_down, trans_note, length_key, system_clock,
                       song, reset, is_rw, Stdy_led, Stdy_buzzer);
+reg rw;
+wire [`NOTE_KEY_BITS-1:0] addr;
+    assign addr = note_key;
+reg [`NOTE_KEY_BITS-1:0] in;
+reg ram_rst;
+    RAM ram(ram_rst, rw, addr, in, trans_note);
+reg setted;
 
     always @(posedge clk, negedge rst_n) begin
         if (!rst_n) begin
@@ -91,7 +98,6 @@ wire [`TUBE_BITS-1:0] pl_seg_en, pl_tube1, pl_tube2;
             en_Free <= 0;
             en_Play <= 0;
             en_Stdy <= 0;
-            en_Set  <= 0;
         end else begin
             if (en_back && state > 0) begin
                 state <= `menu_mode;
@@ -99,7 +105,6 @@ wire [`TUBE_BITS-1:0] pl_seg_en, pl_tube1, pl_tube2;
                 en_Free <= 0;
                 en_Play <= 0;
                 en_Stdy <= 0;
-                en_Set  <= 0;
             end else begin
                 case(state)
                     `menu_mode: begin
@@ -116,7 +121,6 @@ wire [`TUBE_BITS-1:0] pl_seg_en, pl_tube1, pl_tube2;
                                     en_Free <= 0;
                                     en_Play <= 0;
                                     en_Stdy <= 0;
-                                    en_Set  <= 0;
                                 end
                             endcase
                         end
@@ -134,6 +138,7 @@ wire [`TUBE_BITS-1:0] pl_seg_en, pl_tube1, pl_tube2;
                                 case(note_key)
                                     7'b0000001: song <= `little_star;
                                     7'b0000010: song <= `two_tigers;
+                                    7'b0000100: song <= `happy_birthday;
                                     default: song <= `no_song;
                                 endcase
                             end
@@ -152,6 +157,7 @@ wire [`TUBE_BITS-1:0] pl_seg_en, pl_tube1, pl_tube2;
                                 case(note_key)
                                     7'b0000001: song <= `little_star;
                                     7'b0000010: song <= `two_tigers;
+                                    7'b0000100: song <= `happy_birthday;
                                     default: song <= `no_song;
                                 endcase
                             end
@@ -181,6 +187,7 @@ wire [`TUBE_BITS-1:0] pl_seg_en, pl_tube1, pl_tube2;
                                 case(note_key)
                                     7'b0000001: song <= `little_star;
                                     7'b0000010: song <= `two_tigers;
+                                    7'b0000100: song <= `happy_birthday;
                                     7'b1000000: user <= 1;
                                     7'b0100000: user <= 2;
                                     default: song <= `no_song;
@@ -202,48 +209,37 @@ wire [`TUBE_BITS-1:0] pl_seg_en, pl_tube1, pl_tube2;
                             tube2 <= pl_tube2;
                         end
                     end
+                    `set: begin
+                        if (cnt == `NOTE_KEY_BITS) begin
+                            state <= `menu_mode;
+                            cnt <= 0;
+                            en_sd <= 0;
+                        end else begin
+                            if (reset) begin
+                                ram_rst <= 0;
+                                state <= `menu_mode;
+                                cnt <= 0;
+                            end else begin
+                                ram_rst <= rst_n;
+                            end
+                            en_sd <= en_set | ~over;
+                            if (en_set & over) begin
+                                if (!setted && cnt < `NOTE_KEY_BITS) begin
+                                    rw <= 1;
+                                    in <= (7'b1 << cnt);
+                                    setted <= 1;
+                                    cnt <= cnt + 1;
+                                end else begin
+                                    rw <= 0;
+                                end
+                            end else begin
+                                setted <= 0;
+                                rw <= 0;
+                            end
+                        end
+                    end
                 endcase
             end
-        end
-    end
-
-reg rw;
-wire [`NOTE_KEY_BITS-1:0] addr;
-    assign addr = note_key;
-reg [`NOTE_KEY_BITS-1:0] in;
-reg ram_rst;
-    RAM ram(ram_rst, rw, addr, in, trans_note);
-
-reg setted;
-    always @(*) begin
-        if (cnt == `NOTE_KEY_BITS) begin
-            state = `menu_mode;
-            en_Set = 0;
-        end
-        if (en_Set & reset) begin
-            ram_rst = 0;
-            en_Set = 0;
-            state = `menu_mode;
-        end else begin
-            ram_rst = rst_n;
-        end
-        if (en_Set) begin
-            en_sd = en_set | ~over;
-            if (en_set & over) begin
-                if (!setted && cnt < `NOTE_KEY_BITS) begin
-                    rw = 1;
-                    in = (7'b1 << cnt);
-                    setted = 1;
-                    cnt = cnt + 1;
-                end else begin
-                    rw = 0;
-                end
-            end else begin
-                setted = 0;
-            end
-        end else begin
-            cnt = 0;
-            en_sd = 0;
         end
     end
 endmodule

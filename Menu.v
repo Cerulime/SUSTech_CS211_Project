@@ -76,7 +76,7 @@ module Menu(
         endcase
     end
     
-    always @(state,seg_en) begin
+    always @(*) begin
         case(state) 
             `menu_mode:
                 case(seg_en)
@@ -96,17 +96,34 @@ module Menu(
                     8'h02:tube1 = `r;
                     8'h04:tube1 = `E;
                     8'h08:tube1 = `E;
-                    default: tube1 = `emp;
+                    default: begin
+                        tube1 = `emp;
+                        tube2 = `emp;
+                    end
                 endcase
-            `auto_mode: 
+            `auto_mode: begin
                 case(seg_en)
                     8'h01:tube1 = `A;
                     8'h02:tube1 = `u;
                     8'h04:tube1 = `t;
                     8'h08:tube1 = `o;
-                    default: tube1 = `emp;
+                    default:tube1 = `emp;
                 endcase
-            `stdy_mode:
+                case(song)
+                    `little_star:
+                        case(seg_en)
+                            8'h80:tube2 = `one;
+                            default:tube2 = `emp;
+                        endcase
+                    `two_tigers:
+                        case(seg_en)
+                            8'h80:tube2 = `two;
+                            default:tube2 = `emp;
+                        endcase
+                    default:tube2 = `emp;
+                endcase
+            end
+            `stdy_mode: begin
                 case(seg_en)
                     8'h01:tube1 = `S;
                     8'h02:tube1 = `t;
@@ -114,7 +131,21 @@ module Menu(
                     8'h08:tube1 = `y;
                     default: tube1 = `emp;
                 endcase
-            `play_mode:
+                case(song)
+                    `little_star:
+                        case(seg_en)
+                            8'h80:tube2 = `one;
+                            default:tube2 = `emp;
+                        endcase
+                    `two_tigers:
+                        case(seg_en)
+                            8'h80:tube2 = `two;
+                            default:tube2 = `emp;
+                        endcase
+                    default:tube2 = `emp;
+                endcase
+            end
+            `play_mode: begin
                 case(seg_en)
                     8'h01:tube1 = `p;
                     8'h02:tube1 = `L;
@@ -122,65 +153,31 @@ module Menu(
                     8'h08:tube1 = `y;
                     default: tube1 = `emp;
                 endcase
+                case(song)
+                    `little_star:
+                        case(seg_en)
+                            8'h80:tube2 = `one;
+                            default:tube2 = `emp;
+                        endcase
+                    `two_tigers:
+                        case(seg_en)
+                            8'h80:tube2 = `two;
+                            default:tube2 = `emp;
+                        endcase
+                    default:tube2 = `emp;
+                endcase
+            end
             `set:
                 case(seg_en)
                     8'h01:tube1 = `S;
                     8'h02:tube1 = `E;
                     8'h04:tube1 = `t;
-                    default: tube1 = `emp;
+                    default: begin
+                        tube1 = `emp;
+                        tube2 = `emp;
+                    end
                 endcase
             default: tube1 = `emp;
         endcase
-    end
-    
-    always @(*) begin
-        case(state)
-            `free_mode:tube2 = `emp;
-            `auto_mode:
-                case(song)
-                    `little_star:
-                        case(seg_en)
-                            8'h80:tube2 = `one;
-                            default:tube2 = `emp;
-                        endcase
-                    `two_tigers:
-                        case(seg_en)
-                            8'h80:tube2 = `two;
-                            default:tube2 = `emp;
-                        endcase
-                    default:tube2 = `emp;
-                endcase
-            `stdy_mode:
-                case(song)
-                    `little_star:
-                        case(seg_en)
-                            8'h80:tube2 = `one;
-                            default:tube2 = `emp;
-                        endcase
-                    `two_tigers:
-                        case(seg_en)
-                            8'h80:tube2 = `two;
-                            default:tube2 = `emp;
-                        endcase
-                    default:tube2 = `emp;
-                endcase
-            `play_mode:
-                case(song)
-                    `little_star:
-                        case(seg_en)
-                            8'h80:tube2 = `one;
-                            default:tube2 = `emp;
-                        endcase
-                    `two_tigers:
-                        case(seg_en)
-                            8'h80:tube2 = `two;
-                            default:tube2 = `emp;
-                        endcase
-                    default:tube2 = `emp;
-                endcase
-            `set:tube2 = `emp;
-            default:tube2 = `emp;
-        endcase
-    end
-            
+    end     
 endmodule

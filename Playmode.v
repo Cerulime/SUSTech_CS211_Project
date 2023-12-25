@@ -169,7 +169,7 @@ wire [20:0] base_score_user_new;
 wire [20:0] bonus_score_user_new;
     Max max_combo(combo_user[user], last_combo, combo_user_new);
     Max max_acc(acc_user[user], acc, acc_user_new);
-    Max max_level(level_user[user], level, level_user_new);
+    Max max_level({18'b0, level_user[user]}, level, level_user_new);
     Max max_base_score(base_score_user[user], base_score, base_score_user_new);
     Max max_bonus_score(bonus_score_user[user], bonus_score, bonus_score_user_new);
 integer i;

@@ -60,7 +60,7 @@ wire en_back;
 wire buzzer_sd, over;
 reg en_sd;
 reg [`NOTE_BITS-1:0] cnt;
-    Sound sd(clk, en_sd, 3'b100, cnt, 3'b000, 3'b100, buzzer_sd, over);
+    Sound sd(clk, en_sd, 3'b100, cnt, 3'b000, 3'b001, buzzer_sd, over);
 
 reg [`STATE_BITS-1:0] state;
 reg [`SONG_BITS-1:0] song;
@@ -260,18 +260,19 @@ reg setted;
                             end
                             rw <= 0;
                             in <= 0;
+                            en_sd <= ~over;
                         end else begin
                             led <= 7'b1 << cnt;
-                            buzzer <= buzzer_sd;
-                            if (cache_set & reset) begin
+                            led_aux <= trans_note;
+                            if (cache_set && reset) begin
                                 ram_rst <= 0;
                                 state <= `menu_mode;
                                 cnt <= 0;
                                 cache_set <= 0;
                             end else begin
                                 ram_rst <= rst_n;
+                                en_sd <= cache_set | ~over;
                             end
-                            en_sd <= cache_set | ~over;
                             if (cache_set && over && !reset) begin
                                 if (!setted && cnt < `NOTE_KEY_BITS) begin
                                     rw <= 1;
@@ -288,7 +289,10 @@ reg setted;
                                 rw <= 0;
                                 in <= 0;
                             end
+                            if (cache_set)
+                                cache_set <= 0;
                         end
+                        buzzer <= buzzer_sd;
                         seg_en <= mn_seg_en;
                         tube1 <= mn_tube1;
                         tube2 <= mn_tube2;

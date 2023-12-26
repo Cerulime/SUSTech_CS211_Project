@@ -47,7 +47,7 @@ wire [`SONG_CNT_BITS-1:0] track;
                         cnt <= cnt + 1;
                     end else begin
                         cnt <= 0;
-                        song_input <= song_input + 1;
+                        song_input <= `no_song;
                     end
                 end
             end

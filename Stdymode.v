@@ -99,7 +99,7 @@ reg is_sound;
                 length_sd <= length;
                 if (over & is_sound) begin
                     if (cnt < track) begin
-                        cnt <= cnt + 1;
+                        cnt <= cnt + 2;
                         song_input <= song;
                     end else begin
                         cnt <= 0;

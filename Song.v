@@ -26,99 +26,54 @@ module Song(
 
     always @(song) begin
         case(song)
-            `little_star: track <= 43;
-            `two_tigers: track <= 33;
-            `happy_birthday: track <= 26;
-            default: track <= 0;
+            `little_star: track = 86;
+            `two_tigers: track = 74;
+            `happy_birthday: track = 52;
+            default: track = 0;
         endcase
     end
     
-    always @(song, cnt) begin
+    always @(*) begin
         case(song)
             `little_star: begin
                 full_note = 3'b010;
                 case (cnt)
-                    1: begin
-                        octave = 3'b100;
-                        note = `do;
-                        length = `quarter_note;
-                    end
                     2: begin
                         octave = 3'b100;
                         note = `do;
                         length = `quarter_note;
                     end
-                    3: begin
-                        octave = 3'b100;
-                        note = `so;
-                        length = `quarter_note;
-                    end
                     4: begin
                         octave = 3'b100;
-                        note = `so;
-                        length = `quarter_note;
-                    end
-                    5: begin
-                        octave = 3'b100;
-                        note = `la;
+                        note = `do;
                         length = `quarter_note;
                     end
                     6: begin
                         octave = 3'b100;
-                        note = `la;
-                        length = `quarter_note;
-                    end
-                    7: begin
-                        octave = 3'b100;
                         note = `so;
-                        length = `half_note;
+                        length = `quarter_note;
                     end
                     8: begin
                         octave = 3'b100;
-                        note = `fa;
-                        length = `quarter_note;
-                    end
-                    9: begin
-                        octave = 3'b100;
-                        note = `fa;
+                        note = `so;
                         length = `quarter_note;
                     end
                     10: begin
                         octave = 3'b100;
-                        note = `mi;
-                        length = `quarter_note;
-                    end
-                    11: begin
-                        octave = 3'b100;
-                        note = `mi;
+                        note = `la;
                         length = `quarter_note;
                     end
                     12: begin
                         octave = 3'b100;
-                        note = `re;
-                        length = `quarter_note;
-                    end
-                    13: begin
-                        octave = 3'b100;
-                        note = `re;
+                        note = `la;
                         length = `quarter_note;
                     end
                     14: begin
                         octave = 3'b100;
-                        note = `do;
+                        note = `so;
                         length = `half_note;
                     end
-                    15: begin
-                        octave = 3'b100;
-                        note = `so;
-                        length = `quarter_note;
-                    end
                     16: begin
-                        octave = 3'b100;
-                        note = `so;
-                        length = `quarter_note;
-                    end
-                    17: begin
                         octave = 3'b100;
                         note = `fa;
                         length = `quarter_note;
@@ -128,67 +83,32 @@ module Song(
                         note = `fa;
                         length = `quarter_note;
                     end
-                    19: begin
-                        octave = 3'b100;
-                        note = `mi;
-                        length = `quarter_note;
-                    end
                     20: begin
                         octave = 3'b100;
                         note = `mi;
                         length = `quarter_note;
                     end
-                    21: begin
-                        octave = 3'b100;
-                        note = `re;
-                        length = `half_note;
-                    end
                     22: begin
                         octave = 3'b100;
-                        note = `so;
-                        length = `quarter_note;
-                    end
-                    23: begin
-                        octave = 3'b100;
-                        note = `so;
+                        note = `mi;
                         length = `quarter_note;
                     end
                     24: begin
                         octave = 3'b100;
-                        note = `fa;
-                        length = `quarter_note;
-                    end
-                    25: begin
-                        octave = 3'b100;
-                        note = `fa;
+                        note = `re;
                         length = `quarter_note;
                     end
                     26: begin
                         octave = 3'b100;
-                        note = `mi;
-                        length = `quarter_note;
-                    end
-                    27: begin
-                        octave = 3'b100;
-                        note = `mi;
+                        note = `re;
                         length = `quarter_note;
                     end
                     28: begin
                         octave = 3'b100;
-                        note = `re;
+                        note = `do;
                         length = `half_note;
                     end
-                    29: begin
-                        octave = 3'b100;
-                        note = `do;
-                        length = `quarter_note;
-                    end
                     30: begin
-                        octave = 3'b100;
-                        note = `do;
-                        length = `quarter_note;
-                    end
-                    31: begin
                         octave = 3'b100;
                         note = `so;
                         length = `quarter_note;
@@ -198,27 +118,12 @@ module Song(
                         note = `so;
                         length = `quarter_note;
                     end
-                    33: begin
-                        octave = 3'b100;
-                        note = `la;
-                        length = `quarter_note;
-                    end
                     34: begin
-                        octave = 3'b100;
-                        note = `la;
-                        length = `quarter_note;
-                    end
-                    35: begin
-                        octave = 3'b100;
-                        note = `so;
-                        length = `half_note;
-                    end
-                    36: begin
                         octave = 3'b100;
                         note = `fa;
                         length = `quarter_note;
                     end
-                    37: begin
+                    36: begin
                         octave = 3'b100;
                         note = `fa;
                         length = `quarter_note;
@@ -228,67 +133,142 @@ module Song(
                         note = `mi;
                         length = `quarter_note;
                     end
-                    39: begin
+                    40: begin
                         octave = 3'b100;
                         note = `mi;
                         length = `quarter_note;
                     end
-                    40: begin
-                        octave = 3'b100;
-                        note = `re;
-                        length = `quarter_note;
-                    end
-                    41: begin
-                        octave = 3'b100;
-                        note = `re;
-                        length = `quarter_note;
-                    end
                     42: begin
+                        octave = 3'b100;
+                        note = `re;
+                        length = `half_note;
+                    end
+                    44: begin
+                        octave = 3'b100;
+                        note = `so;
+                        length = `quarter_note;
+                    end
+                    46: begin
+                        octave = 3'b100;
+                        note = `so;
+                        length = `quarter_note;
+                    end
+                    48: begin
+                        octave = 3'b100;
+                        note = `fa;
+                        length = `quarter_note;
+                    end
+                    50: begin
+                        octave = 3'b100;
+                        note = `fa;
+                        length = `quarter_note;
+                    end
+                    52: begin
+                        octave = 3'b100;
+                        note = `mi;
+                        length = `quarter_note;
+                    end
+                    54: begin
+                        octave = 3'b100;
+                        note = `mi;
+                        length = `quarter_note;
+                    end
+                    56: begin
+                        octave = 3'b100;
+                        note = `re;
+                        length = `half_note;
+                    end
+                    58: begin
+                        octave = 3'b100;
+                        note = `do;
+                        length = `quarter_note;
+                    end
+                    60: begin
+                        octave = 3'b100;
+                        note = `do;
+                        length = `quarter_note;
+                    end
+                    62: begin
+                        octave = 3'b100;
+                        note = `so;
+                        length = `quarter_note;
+                    end
+                    64: begin
+                        octave = 3'b100;
+                        note = `so;
+                        length = `quarter_note;
+                    end
+                    66: begin
+                        octave = 3'b100;
+                        note = `la;
+                        length = `quarter_note;
+                    end
+                    68: begin
+                        octave = 3'b100;
+                        note = `la;
+                        length = `quarter_note;
+                    end
+                    70: begin
+                        octave = 3'b100;
+                        note = `so;
+                        length = `half_note;
+                    end
+                    72: begin
+                        octave = 3'b100;
+                        note = `fa;
+                        length = `quarter_note;
+                    end
+                    74: begin
+                        octave = 3'b100;
+                        note = `fa;
+                        length = `quarter_note;
+                    end
+                    76: begin
+                        octave = 3'b100;
+                        note = `mi;
+                        length = `quarter_note;
+                    end
+                    78: begin
+                        octave = 3'b100;
+                        note = `mi;
+                        length = `quarter_note;
+                    end
+                    80: begin
+                        octave = 3'b100;
+                        note = `re;
+                        length = `quarter_note;
+                    end
+                    82: begin
+                        octave = 3'b100;
+                        note = `re;
+                        length = `quarter_note;
+                    end
+                    84: begin
                         octave = 3'b100;
                         note = `do;
                         length = `half_note;
                     end
                     default: begin
                         octave = 3'b100;
-                        note = 3'b000;
-                        length = 3'b000;
+                        note = `null;
+                        length = `sixty_fourth_note;
                     end
                 endcase
             end
             `two_tigers: begin
                 full_note = 3'b010;
                 case(cnt) 
-                    1: begin
+                    2: begin
                     octave = 3'b100;
                     note = `do;
-                    length = `eighth_note;
-                end
-                2: begin
-                    octave = 3'b100;
-                    note = `re;
-                    length = `eighth_note;
-                end
-                3: begin
-                    octave = 3'b100;
-                    note = `mi;
                     length = `eighth_note;
                 end
                 4: begin
                     octave = 3'b100;
-                    note = `do;
-                    length = `eighth_note;
-                end
-                5: begin
-                    octave = 3'b100;
-                    note = `do;
-                    length = `eighth_note;
-                end
-                6: begin
-                    octave = 3'b100;
                     note = `re;
                     length = `eighth_note;
                 end
-                7: begin
+                6: begin
                     octave = 3'b100;
                     note = `mi;
                     length = `eighth_note;
@@ -298,99 +278,234 @@ module Song(
                     note = `do;
                     length = `eighth_note;
                 end
-                9: begin
-                    octave = 3'b100;
-                    note = `mi;
-                    length = `eighth_note;
-                end
                 10: begin
                     octave = 3'b100;
-                    note = `fa;
-                    length = `eighth_note;
-                end
-                11: begin
-                    octave = 3'b100;
-                    note = `so;
+                    note = `do;
                     length = `eighth_note;
                 end
                 12: begin
                     octave = 3'b100;
-                    note = `mi;
-                    length = `eighth_note;
-                end
-                13: begin
-                    octave = 3'b100;
-                    note = `fa;
+                    note = `re;
                     length = `eighth_note;
                 end
                 14: begin
                     octave = 3'b100;
-                    note = `so;
+                    note = `mi;
                     length = `eighth_note;
-                end
-                15: begin
-                    octave = 3'b100;
-                    note = `so;
-                    length = `sixteenth_note;
                 end
                 16: begin
                     octave = 3'b100;
-                    note = `la;
-                    length = `sixteenth_note;
-                end
-                17: begin
-                    octave = 3'b100;
-                    note = `so;
-                    length = `sixteenth_note;
+                    note = `do;
+                    length = `eighth_note;
                 end
                 18: begin
-                    octave = 3'b100;
-                    note = `fa;
-                    length = `sixteenth_note;
-                end
-                19: begin
                     octave = 3'b100;
                     note = `mi;
                     length = `eighth_note;
                 end
                 20: begin
                     octave = 3'b100;
-                    note = `do;
+                    note = `fa;
                     length = `eighth_note;
-                end
-                21: begin
-                    octave = 3'b100;
-                    note = `so;
-                    length = `sixteenth_note;
                 end
                 22: begin
                     octave = 3'b100;
-                    note = `la;
-                    length = `sixteenth_note;
-                end
-                23: begin
-                    octave = 3'b100;
                     note = `so;
-                    length = `sixteenth_note;
+                    length = `eighth_note;
                 end
                 24: begin
-                    octave = 3'b100;
-                    note = `fa;
-                    length = `sixteenth_note;
-                end
-                25: begin
+                        octave = 3'b100;
+                        note = `null;
+                        length = `eighth_note;
+                    end
+                26: begin
                     octave = 3'b100;
                     note = `mi;
                     length = `eighth_note;
                 end
-                26: begin
+                28: begin
+                    octave = 3'b100;
+                    note = `fa;
+                    length = `eighth_note;
+                end
+                30: begin
+                    octave = 3'b100;
+                    note = `so;
+                    length = `eighth_note;
+                end
+                32: begin
+                        octave = 3'b100;
+                        note = `null;
+                        length = `eighth_note;
+                    end
+                34: begin
+                    octave = 3'b100;
+                    note = `so;
+                    length = `sixteenth_note;
+                end
+                36: begin
+                    octave = 3'b100;
+                    note = `la;
+                    length = `sixteenth_note;
+                end
+                38: begin
+                    octave = 3'b100;
+                    note = `so;
+                    length = `sixteenth_note;
+                end
+                40: begin
+                    octave = 3'b100;
+                    note = `fa;
+                    length = `sixteenth_note;
+                end
+                42: begin
+                    octave = 3'b100;
+                    note = `mi;
+                    length = `eighth_note;
+                end
+                44: begin
                     octave = 3'b100;
                     note = `do;
                     length = `eighth_note;
                 end
-                27: begin
+                46: begin
+                    octave = 3'b100;
+                    note = `so;
+                    length = `sixteenth_note;
+                end
+                48: begin
+                    octave = 3'b100;
+                    note = `la;
+                    length = `sixteenth_note;
+                end
+                50: begin
+                    octave = 3'b100;
+                    note = `so;
+                    length = `sixteenth_note;
+                end
+                52: begin
+                    octave = 3'b100;
+                    note = `fa;
+                    length = `sixteenth_note;
+                end
+                54: begin
+                    octave = 3'b100;
+                    note = `mi;
+                    length = `eighth_note;
+                end
+                56: begin
                     octave = 3'b100;
                     note = `do;
+                    length = `eighth_note;
+                end
+                58: begin
+                    octave = 3'b100;
+                    note = `do;
+                    length = `eighth_note;
+                end
+                60: begin
+                    octave = 3'b011;
+                    note = `so;
+                    length = `eighth_note;
+                end
+                62: begin
+                    octave = 3'b100;
+                    note = `do;
+                    length = `eighth_note;
+                end
+                64: begin
+                        octave = 3'b100;
+                        note = `null;
+                        length = `sixteenth_note;
+                    end
+                66: begin
+                    octave = 3'b100;
+                    note = `do;
+                    length = `eighth_note;
+                end
+                70: begin
+                    octave = 3'b011;
+                    note = `so;
+                    length = `eighth_note;
+                end
+                72: begin
+                    octave = 3'b100;
+                    note = `do;
+                    length = `eighth_note;
+                end
+                default: begin
+                    octave = 3'b100;
+                    note = `null;
+                    length = `sixty_fourth_note;
+                end
+            endcase
+            end
+            `happy_birthday: begin
+                full_note = 3'b010;
+                case(cnt)
+                    2: begin
+                    octave = 3'b011;
+                    note = `so;
+                    length = `eighth_note;
+                end
+                4: begin
+                    octave = 3'b011;
+                    note = `so;
+                    length = `eighth_note;
+                end
+                6: begin
+                    octave = 3'b011;
+                    note = `la;
+                    length = `quarter_note;
+                end
+                8: begin
+                    octave = 3'b011;
+                    note = `so;
+                    length = `quarter_note;
+                end
+                10: begin
+                    octave = 3'b100;
+                    note = `do;
+                    length = `quarter_note;
+                end
+                12: begin
+                    octave = 3'b011;
+                    note = `xi;
+                    length = `half_note;
+                end
+                14: begin
+                    octave = 3'b011;
+                    note = `so;
+                    length = `eighth_note;
+                end
+                16: begin
+                    octave = 3'b011;
+                    note = `so;
+                    length = `eighth_note;
+                end
+                18: begin
+                    octave = 3'b011;
+                    note = `la;
+                    length = `quarter_note;
+                end
+                20: begin
+                    octave = 3'b011;
+                    note = `so;
+                    length = `quarter_note;
+                end
+                22: begin
+                    octave = 3'b100;
+                    note = `re;
+                    length = `quarter_note;
+                end
+                24: begin
+                    octave = 3'b100;
+                    note = `do;
+                    length = `half_note;
+                end
+                26: begin
+                    octave = 3'b011;
+                    note = `so;
                     length = `eighth_note;
                 end
                 28: begin
@@ -398,172 +513,72 @@ module Song(
                     note = `so;
                     length = `eighth_note;
                 end
-                29: begin
-                    octave = 3'b011;
-                    note = `do;
-                    length = `eighth_note;
-                end
                 30: begin
                     octave = 3'b100;
-                    note = `do;
-                    length = `eighth_note;
-                end
-                31: begin
-                    octave = 3'b011;
                     note = `so;
-                    length = `eighth_note;
+                    length = `quarter_note;
                 end
                 32: begin
-                    octave = 3'b011;
-                    note = `do;
-                    length = `eighth_note;
-                end
-                default: begin
-                    octave = 3'b100;
-                    note = 3'b000;
-                    length = 3'b000;
-                end
-            endcase
-            end
-            `happy_birthday: begin
-                full_note = 3'b010;
-                case(cnt)
-                    1: begin
-                    octave = 3'b011;
-                    note = `so;
-                    length = `eighth_note;
-                end
-                2: begin
-                    octave = 3'b011;
-                    note = `so;
-                    length = `eighth_note;
-                end
-                3: begin
-                    octave = 3'b011;
-                    note = `la;
-                    length = `quarter_note;
-                end
-                4: begin
-                    octave = 3'b011;
-                    note = `so;
-                    length = `quarter_note;
-                end
-                5: begin
-                    octave = 3'b100;
-                    note = `do;
-                    length = `quarter_note;
-                end
-                6: begin
-                    octave = 3'b011;
-                    note = `xi;
-                    length = `half_note;
-                end
-                7: begin
-                    octave = 3'b011;
-                    note = `so;
-                    length = `eighth_note;
-                end
-                8: begin
-                    octave = 3'b011;
-                    note = `so;
-                    length = `eighth_note;
-                end
-                9: begin
-                    octave = 3'b011;
-                    note = `la;
-                    length = `quarter_note;
-                end
-                10: begin
-                    octave = 3'b011;
-                    note = `so;
-                    length = `quarter_note;
-                end
-                11: begin
-                    octave = 3'b100;
-                    note = `re;
-                    length = `quarter_note;
-                end
-                12: begin
-                    octave = 3'b100;
-                    note = `do;
-                    length = `half_note;
-                end
-                13: begin
-                    octave = 3'b011;
-                    note = `so;
-                    length = `eighth_note;
-                end
-                14: begin
-                    octave = 3'b011;
-                    note = `so;
-                    length = `eighth_note;
-                end
-                15: begin
-                    octave = 3'b100;
-                    note = `so;
-                    length = `quarter_note;
-                end
-                16: begin
                     octave = 3'b100;
                     note = `mi;
                     length = `quarter_note;
                 end
-                17: begin
+                34: begin
                     octave = 3'b100;
                     note = `do;
                     length = `quarter_note;
                 end
-                18: begin
+                36: begin
                     octave = 3'b011;
                     note = `xi;
                     length = `quarter_note;
                 end
-                19: begin
+                38: begin
                     octave = 3'b011;
                     note = `la;
                     length = `quarter_note;
                 end
-                20: begin
+                40: begin
                     octave = 3'b100;
                     note = `fa;
                     length = `eighth_note;
                 end
-                21: begin
+                42: begin
                     octave = 3'b100;
                     note = `fa;
                     length = `eighth_note;
                 end
-                22: begin
+                44: begin
                     octave = 3'b100;
                     note = `mi;
                     length = `quarter_note;
                 end
-                23: begin
+                46: begin
                     octave = 3'b100;
                     note = `do;
                     length = `quarter_note;
                 end
-                24: begin
+                48: begin
                     octave = 3'b100;
                     note = `re;
                     length = `quarter_note;
                 end
-                25: begin
+                50: begin
                     octave = 3'b100;
                     note = `do;
                     length = `half_note;
                 end
                 default: begin
                     octave <= 3'b100;
-                    note <= 3'b000;
-                    length <= 3'b000;
+                    note <= `null;
+                    length <= `sixty_fourth_note;
                 end
             endcase
         end
             default: begin
                 octave <= 3'b100;
-                note <= 3'b000;
-                length <= 3'b000;
+                note <= `null;
+                length <= `full_note;
             end
         endcase
     end

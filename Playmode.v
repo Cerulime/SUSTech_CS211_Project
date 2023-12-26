@@ -135,7 +135,7 @@ wire [`TUBE_BITS-1:0] usr_seg_en, usr_tube1, usr_tube2;
 reg can_add;
     always @(posedge clk) begin
         if (en) begin
-            if (~over & can_add & note_key != 7) begin
+            if (over == 0 && can_add && note_key != 7) begin
                 base_score <= base_score + base_temp;
                 bonus_score <= bonus_score + bonus_temp;
                 last_combo <= combo;
@@ -166,7 +166,7 @@ wire [`MAX_NUM-1:0] bonus_score_user_new;
     Max max_base_score(base_score_user[user], base_score, base_score_user_new);
     Max max_bonus_score(bonus_score_user[user], bonus_score, bonus_score_user_new);
 integer i;
-    always @(posedge clk) begin
+    always @(posedge clk, negedge rst_n) begin
         if (~rst_n) begin
             for (i = 0; i < (1<<`USER_BITS); i = i + 1) begin
                 combo_user[i] <= 0;

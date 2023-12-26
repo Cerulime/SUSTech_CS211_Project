@@ -238,6 +238,9 @@ reg setted;
                                 endcase
                                 cache_set <= 0;
                             end
+                            seg_en <= mn_seg_en;
+                            tube1 <= mn_tube1;
+                            tube2 <= mn_tube2;
                         end else begin
                             en_Play <= 1;
                             led <= Play_led;

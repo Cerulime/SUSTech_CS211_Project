@@ -74,7 +74,7 @@ wire [`MAX_NUM-1:0] one_hit_score;
     assign one_hit_score = 5000 * mod_mutiplier / total_note;
 localparam P = 16, S = 64, A = 97, B = 127, C = 188;
 wire [`MAX_NUM-1:0] sqrt_combo;
-    Sqrt sqrt(combo, sqrt_combo);
+    Sqrt sqrt(last_combo, sqrt_combo);
     always @(*) begin
         if (clock < goal_clock) begin
             timer = goal_clock - clock;

@@ -92,7 +92,7 @@ wire [`NOTE_KEY_BITS-1:0] addr;
     assign addr = note_key;
 reg [`NOTE_KEY_BITS-1:0] in;
 reg ram_rst;
-    RAM ram(ram_rst, rw, addr, in, trans_note);
+    RAM ram(clk, ram_rst, rw, addr, in, trans_note);
 reg setted;
 
     always @(posedge clk, negedge rst_n) begin
@@ -253,10 +253,16 @@ reg setted;
                     end
                     `set: begin
                         if (cnt == `NOTE_KEY_BITS) begin
-                            state <= `menu_mode;
-                            cnt <= 0;
-                            en_sd <= 0;
+                            if (over) begin
+                                state <= `menu_mode;
+                                cnt <= 0;
+                                en_sd <= 0;
+                            end
+                            rw <= 0;
+                            in <= 0;
                         end else begin
+                            led <= 7'b1 << cnt;
+                            buzzer <= buzzer_sd;
                             if (cache_set & reset) begin
                                 ram_rst <= 0;
                                 state <= `menu_mode;
@@ -266,7 +272,7 @@ reg setted;
                                 ram_rst <= rst_n;
                             end
                             en_sd <= cache_set | ~over;
-                            if (cache_set & over & !reset) begin
+                            if (cache_set && over && !reset) begin
                                 if (!setted && cnt < `NOTE_KEY_BITS) begin
                                     rw <= 1;
                                     in <= (7'b1 << cnt);
@@ -275,10 +281,12 @@ reg setted;
                                     cache_set <= 0;
                                 end else begin
                                     rw <= 0;
+                                    in <= 0;
                                 end
                             end else begin
                                 setted <= 0;
                                 rw <= 0;
+                                in <= 0;
                             end
                         end
                         seg_en <= mn_seg_en;

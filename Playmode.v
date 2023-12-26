@@ -48,7 +48,7 @@ module Playmode(
     input [3:0] difficutly,
     output [`NOTE_KEY_BITS-1:0] note_led,
     output [`NOTE_KEY_BITS-1:0] level_led,
-    output buzzer,
+    output reg buzzer,
     output reg [`TUBE_BITS-1:0] seg_en,
     output reg [`TUBE_BITS-1:0] tube1,
     output reg [`TUBE_BITS-1:0] tube2

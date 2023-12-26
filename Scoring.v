@@ -70,7 +70,8 @@ reg [`MAX_NUM-1:0] mod_mutiplier, mod_divider;
 reg [`MAX_NUM-1:0] hit_score;
 reg [`MAX_NUM-1:0] hit_bonus;
 reg [`MAX_NUM-1:0] timer;
-reg [`MAX_NUM-1:0] one_hit_score;
+wire [`MAX_NUM-1:0] one_hit_score;
+    assign one_hit_score = 5000 * mod_mutiplier / total_note;
 localparam P = 16, S = 64, A = 97, B = 127, C = 188;
 wire [`MAX_NUM-1:0] sqrt_combo;
     Sqrt sqrt(combo, sqrt_combo);
@@ -124,9 +125,10 @@ wire [`MAX_NUM-1:0] sqrt_combo;
                 combo = 0;
             end
         end
-        one_hit_score = 5000 * mod_mutiplier / total_note;
         base_score = one_hit_score * hit_score / 320;
         bonus_score = one_hit_score * hit_bonus * sqrt_combo / 32;
+    end
+    always @(*) begin
         if (now_cnt == 0)
             acc = 10000;
         else

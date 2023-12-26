@@ -106,7 +106,7 @@ reg [`MAX_NUM-1:0] base_score, bonus_score, last_combo;
 wire [`MAX_NUM-1:0] base_temp, bonus_temp, combo;
 wire [`MAX_NUM-1:0] acc;
 wire [2:0] level;
-    Scoring sc(clock, octave, note, length, 
+    Scoring sc(clk, clock, octave, note, length, 
                goal_clock, goal_octave, goal_note, goal_length, 
                last_combo, cnt, track, mod, difficutly, base_score, 
                base_temp, bonus_temp, combo, acc, level);

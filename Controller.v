@@ -70,7 +70,7 @@ wire [`TUBE_BITS-1:0] mn_seg_en, mn_tube1, mn_tube2;
 
 wire Auto_buzzer, Free_buzzer, Play_buzzer, Stdy_buzzer;
 wire [`NOTE_KEY_BITS-1:0] Auto_led, Free_led, Play_led, Play_led_aux, Stdy_led, Stdy_led_aux;
-reg en_Auto, en_Free, en_Play, en_Stdy;
+reg en_Auto, en_Free, en_Play, en_Stdy, en_Set;
 wire [`NOTE_KEY_BITS-1:0] trans_note;
     Automode automode(clk, en_Auto, song, Auto_led, Auto_buzzer);
     Freemode freemode(clk, en_Free, rst_n, submit, oct_up, oct_down, trans_note, length_key, system_clk,
@@ -102,6 +102,7 @@ reg setted;
             en_Free <= 0;
             en_Play <= 0;
             en_Stdy <= 0;
+            en_Set  <= 0;
         end else begin
             last_en_set <= en_set;
             if (last_en_set ^ en_set) begin
@@ -115,6 +116,7 @@ reg setted;
                 en_Free <= 0;
                 en_Play <= 0;
                 en_Stdy <= 0;
+                en_Set  <= 0;
             end else begin
                 case(state)
                     `menu_mode: begin
@@ -125,13 +127,14 @@ reg setted;
                                 7'b0000010: begin state <= `auto_mode; en_Auto <= 0; song <= 0; end
                                 7'b0000100: begin state <= `stdy_mode; en_Stdy <= 0; song <= 0; end
                                 7'b0001000: begin state <= `play_mode; en_Play <= 0; song <= 0; difficutly <= 4; pulse_ack <= 0; end
-                                7'b0010000: begin state <= `set; cnt <= 3'b000; end 
+                                7'b0010000: begin state <= `set; en_Set <= 1; cnt <= 3'b000; end 
                                 default: begin
                                     state <= `menu_mode;
                                     en_Auto <= 0;
                                     en_Free <= 0;
                                     en_Play <= 0;
                                     en_Stdy <= 0;
+                                    en_Set  <= 0;
                                 end
                             endcase
                             cache_set <= 0;
@@ -253,15 +256,20 @@ reg setted;
                     end
                     `set: begin
                         if (cnt == `NOTE_KEY_BITS) begin
-                            if (over) begin
-                                state <= `menu_mode;
-                                cnt <= 0;
-                                en_sd <= 0;
-                            end
+                            state <= `menu_mode;
+                            cnt <= 0;
+                            en_sd <= 0;
                             rw <= 0;
                             in <= 0;
-                            en_sd <= ~over;
+                            en_Set <= 0;
                         end else begin
+                            if (en_Set == 1) begin
+                                if (cnt == 0) begin
+                                    cache_set <= 1;
+                                    setted <= 1;
+                                end
+                                en_Set <= 0;
+                            end
                             led <= 7'b1 << cnt;
                             led_aux <= trans_note;
                             if (cache_set && reset) begin

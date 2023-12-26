@@ -179,7 +179,7 @@ integer i;
             if (en) begin
                 if (cnt == track) begin
                     combo_user[user] <= combo_user_new;
-                    acc_user[user] <= acc_user_new;
+                    acc_user[user] <= base_score_user_new * 10 / (track * 3);
                     level_user[user] <= level;
                     base_score_user[user] <= base_score_user_new;
                     bonus_score_user[user] <= bonus_score_user_new;

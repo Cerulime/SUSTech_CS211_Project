@@ -173,10 +173,10 @@ reg setted;
                             en_Auto <= 1;
                             led <= Auto_led;
                             buzzer <= Auto_buzzer;
-                            seg_en <= mn_seg_en;
-                            tube1 <= mn_tube1;
-                            tube2 <= mn_tube2;
                         end
+                        seg_en <= mn_seg_en;
+                        tube1 <= mn_tube1;
+                        tube2 <= mn_tube2;
                     end
                     `stdy_mode: begin
                         if (song == `no_song && ~reset) begin
@@ -202,10 +202,10 @@ reg setted;
                             led <= Stdy_led;
                             led_aux <= Stdy_led_aux;
                             buzzer <= Stdy_buzzer;
-                            seg_en <= mn_seg_en;
-                            tube1 <= mn_tube1;
-                            tube2 <= mn_tube2;
                         end
+                        seg_en <= mn_seg_en;
+                        tube1 <= mn_tube1;
+                        tube2 <= mn_tube2;
                     end
                     `play_mode: begin
                         if (song == `no_song) begin
